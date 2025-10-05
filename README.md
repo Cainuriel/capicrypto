@@ -70,6 +70,19 @@ a = 11² = 121          // ← ¡capicúa²! 🎯
 
 Como un loro que repite su reflejo infinitamente... 🦜🪞🦜
 
+### 📊 Fundamento Teórico: La Rareza de los Primos Capicúa
+
+**Nota Educativa**: Los números capicúa primos son extremadamente raros. Según el paper ["Almost All Palindromes Are Composite"](https://www.jstor.org/stable/4145070) de William D. Banks (2004), la densidad de primos palindrómicos tiende a cero a medida que consideramos números más grandes.
+
+**¿Qué significa esto para CapiCrypto?**
+
+- 🎓 **Propósito Educativo**: Encontrar primos capicúa adecuados es un desafío matemático interesante
+- 🔢 **Rareza Estadística**: Los primos palindrómicos son cada vez más escasos conforme aumenta el tamaño
+- ⚠️ **NO mejora la seguridad**: Este paper es puramente teórico/estadístico
+- ✨ **Valor Pedagógico**: Demuestra cómo las propiedades estructurales (simetría) son raras en primos
+
+**Conclusión**: Los capicúas son fascinantes matemáticamente, pero esta propiedad es **estética y educativa**, no criptográficamente ventajosa. Para seguridad real, usar curvas estándar auditadas.
+
 ### Características
 
 - ✅ **Curva válida**: Discriminante Δ = 4a³ + 27b² ≠ 0
