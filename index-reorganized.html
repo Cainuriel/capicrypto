@@ -47,8 +47,8 @@
       opacity: 0.95;
     }
     
-    /* DISEÑO DE 2 COLUMNAS */
-    .content {
+    /* DISEÑO: OPERACIONES (izq) + CONSOLA (der) */
+    .top-section {
       padding: 2rem;
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -56,123 +56,30 @@
       align-items: stretch;
     }
     
-    /* Panel izquierdo - CONTROLES */
-    .left-panel {
+    /* Panel izquierdo - OPERACIONES */
+    .operations-panel {
       display: flex;
       flex-direction: column;
       gap: 1.5rem;
-      padding-right: 1rem;
     }
     
-    /* Panel derecho - CONSOLA (sticky) */
-    .right-panel {
-      position: sticky;
-      top: 2rem;
+    /* Panel derecho - CONSOLA */
+    .console-panel {
       display: flex;
       flex-direction: column;
-      gap: 1.5rem;
-      height: fit-content;
+      gap: 1rem;
     }
     
-    .right-panel > div:last-child {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
+    /* SECCIÓN INFERIOR: Parámetros (ancho completo) */
+    .bottom-section {
+      padding: 0 2rem 2rem 2rem;
     }
     
     /* Responsive - móviles 1 columna */
     @media (max-width: 1024px) {
-      .content {
+      .top-section {
         grid-template-columns: 1fr;
       }
-      .right-panel {
-        position: relative;
-        top: 0;
-      }
-      .left-panel {
-        max-height: none;
-      }
-    }
-    
-    .palindrome-box {
-      background: linear-gradient(135deg, #f0f4ff 0%, #e8eeff 100%);
-      border: 3px solid #667eea;
-      border-radius: 15px;
-      padding: 2rem;
-      text-align: center;
-      font-family: 'Courier New', monospace;
-      font-size: 1.1rem;
-      line-height: 2;
-      box-shadow: 0 4px 15px rgba(102, 126, 234, 0.2);
-    }
-    
-    .palindrome-box .big {
-      font-size: 1.5rem;
-      font-weight: bold;
-      color: #667eea;
-      display: block;
-      margin: 0.5rem 0;
-    }
-    
-    .info-grid {
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 1rem;
-    }
-    
-    .info-card {
-      background: #f8f9fa;
-      border-radius: 12px;
-      padding: 1.5rem;
-      border-left: 4px solid #667eea;
-      transition: transform 0.3s, box-shadow 0.3s;
-    }
-    
-    .info-card:hover {
-      transform: translateX(5px);
-      box-shadow: 0 8px 20px rgba(102, 126, 234, 0.2);
-    }
-    
-    .info-card h3 {
-      color: #667eea;
-      margin-bottom: 0.5rem;
-      font-size: 1.1rem;
-    }
-    
-    .info-card p {
-      font-size: 0.95rem;
-      line-height: 1.4;
-    }
-    
-    .params {
-      background: #1e1e1e;
-      color: #00ff00;
-      padding: 1.5rem;
-      border-radius: 8px;
-      font-family: 'Courier New', monospace;
-      font-size: 0.9rem;
-      overflow-x: auto;
-    }
-    
-    .params div {
-      margin: 0.5rem 0;
-      line-height: 1.5;
-    }
-    
-    .params .key {
-      color: #00d4ff;
-      font-weight: bold;
-      min-width: 80px;
-      display: inline-block;
-    }
-    
-    .params .value {
-      color: #ffff00;
-    }
-    
-    .params .comment {
-      color: #888;
-      font-style: italic;
     }
     
     .button-grid {
@@ -232,7 +139,7 @@
       overflow-x: auto;
       white-space: pre-wrap;
       word-wrap: break-word;
-      min-height: 400px;
+      min-height: 600px;
       flex: 1;
       overflow-y: auto;
       border: 2px solid #667eea;
@@ -243,40 +150,6 @@
       content: "🦜 Presiona un botón para ver resultados...\n\nComo un loro que espera, aquí aparecerán las operaciones criptográficas.";
       color: #666;
       line-height: 1.8;
-    }
-    
-    .alert {
-      padding: 1rem;
-      margin: 1rem 0;
-      border-radius: 12px;
-      border-left: 4px solid;
-      display: flex;
-      align-items: start;
-      gap: 1rem;
-      font-size: 0.9rem;
-    }
-    
-    .alert-warning {
-      background: #fff3cd;
-      border-color: #ffc107;
-      color: #856404;
-    }
-    
-    .alert-success {
-      background: #d4edda;
-      border-color: #28a745;
-      color: #155724;
-    }
-    
-    .alert-info {
-      background: #d1ecf1;
-      border-color: #17a2b8;
-      color: #0c5460;
-    }
-    
-    .alert-icon {
-      font-size: 1.5rem;
-      flex-shrink: 0;
     }
     
     .address-display {
@@ -316,25 +189,6 @@
       line-height: 1.6;
     }
     
-    footer {
-      background: #f8f9fa;
-      padding: 2rem;
-      text-align: center;
-      color: #666;
-      border-top: 3px solid #e0e7ff;
-      font-size: 0.95rem;
-    }
-    
-    footer a {
-      color: #667eea;
-      text-decoration: none;
-      font-weight: 600;
-    }
-    
-    footer a:hover {
-      text-decoration: underline;
-    }
-    
     .copy-btn {
       background: #28a745;
       color: white;
@@ -352,13 +206,69 @@
       transform: scale(1.05);
     }
     
-    @keyframes pulse {
-      0%, 100% { transform: scale(1); }
-      50% { transform: scale(1.05); }
+    .params {
+      background: #1e1e1e;
+      color: #00ff00;
+      padding: 1.5rem;
+      border-radius: 8px;
+      font-family: 'Courier New', monospace;
+      font-size: 0.9rem;
+      overflow-x: auto;
     }
     
-    .pulse {
-      animation: pulse 2s infinite;
+    .params div {
+      margin: 0.5rem 0;
+      line-height: 1.5;
+    }
+    
+    .params .key {
+      color: #00d4ff;
+      font-weight: bold;
+      min-width: 80px;
+      display: inline-block;
+    }
+    
+    .params .value {
+      color: #ffff00;
+    }
+    
+    .params .comment {
+      color: #888;
+      font-style: italic;
+    }
+    
+    .alert {
+      padding: 1rem;
+      margin: 1rem 0;
+      border-radius: 12px;
+      border-left: 4px solid;
+      display: flex;
+      align-items: start;
+      gap: 1rem;
+      font-size: 0.9rem;
+    }
+    
+    .alert-warning {
+      background: #fff3cd;
+      border-color: #ffc107;
+      color: #856404;
+    }
+    
+    .alert-success {
+      background: #d4edda;
+      border-color: #28a745;
+      color: #155724;
+    }
+    
+    .alert-info {
+      background: #d1ecf1;
+      border-color: #17a2b8;
+      color: #0c5460;
+    }
+    
+    .alert-icon {
+      font-size: 1.5rem;
+      flex-shrink: 0;
     }
     
     h2 {
@@ -402,69 +312,32 @@
       resize: vertical;
     }
     
-    /* SECCIÓN DE ANCHO COMPLETO - 2 columnas */
-    .full-width-section {
-      padding: 2rem;
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 2rem;
-    }
-    
-    /* En móviles, 1 columna */
-    @media (max-width: 1024px) {
-      .full-width-section {
-        grid-template-columns: 1fr;
-      }
-    }
-    
-    .palindrome-box {
-      background: linear-gradient(135deg, #f0f4ff 0%, #e8eeff 100%);
-      border: 3px solid #667eea;
-      border-radius: 15px;
+    footer {
+      background: #f8f9fa;
       padding: 2rem;
       text-align: center;
-      font-family: 'Courier New', monospace;
-      font-size: 1.1rem;
-      line-height: 2;
-      box-shadow: 0 4px 15px rgba(102, 126, 234, 0.2);
-    }
-    
-    .palindrome-box .big {
-      font-size: 1.5rem;
-      font-weight: bold;
-      color: #667eea;
-      display: block;
-      margin: 0.5rem 0;
-    }
-    
-    .info-grid {
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 1rem;
-    }
-    
-    .info-card {
-      background: #f8f9fa;
-      border-radius: 12px;
-      padding: 1.5rem;
-      border-left: 4px solid #667eea;
-      transition: transform 0.3s, box-shadow 0.3s;
-    }
-    
-    .info-card:hover {
-      transform: translateX(5px);
-      box-shadow: 0 8px 20px rgba(102, 126, 234, 0.2);
-    }
-    
-    .info-card h3 {
-      color: #667eea;
-      margin-bottom: 0.5rem;
-      font-size: 1.1rem;
-    }
-    
-    .info-card p {
+      color: #666;
+      border-top: 3px solid #e0e7ff;
       font-size: 0.95rem;
-      line-height: 1.4;
+    }
+    
+    footer a {
+      color: #667eea;
+      text-decoration: none;
+      font-weight: 600;
+    }
+    
+    footer a:hover {
+      text-decoration: underline;
+    }
+    
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+    }
+    
+    .pulse {
+      animation: pulse 2s infinite;
     }
   </style>
 </head>
@@ -475,10 +348,12 @@
       <p class="subtitle">Criptografía de Curvas Elípticas con Números Capicúa</p>
     </header>
     
-    <main class="content">
+    <!-- SECCIÓN SUPERIOR: OPERACIONES (izq) + CONSOLA (der) -->
+    <section class="top-section">
       
-      <section class="left-panel">
-      
+      <!-- PANEL IZQUIERDO: OPERACIONES CRIPTOGRÁFICAS -->
+      <div class="operations-panel">
+        
         <h2>🔐 Operaciones Criptográficas</h2>
         
         <div class="button-grid">
@@ -488,6 +363,14 @@
           <button class="btn-secondary" onclick="showCurveInfo()">
             📊 Info Técnica
           </button>
+        </div>
+        
+        <div id="addressDisplay" style="display: none;">
+          <div class="address-display">
+            <div class="label">🏠 Tu Dirección CapiCrypto</div>
+            <div class="address" id="addressValue"></div>
+            <button class="copy-btn" onclick="copyAddress()">📋 Copiar Dirección</button>
+          </div>
         </div>
         
         <div>
@@ -521,101 +404,52 @@
           </div>
         </div>
         
-      </section>
-      
-      <section class="right-panel">
-        
-        <div id="addressDisplay" style="display: none;">
-          <div class="address-display">
-            <div class="label">🏠 Tu Dirección CapiCrypto</div>
-            <div class="address" id="addressValue"></div>
-            <button class="copy-btn" onclick="copyAddress()">📋 Copiar Dirección</button>
+        <div class="alert alert-warning">
+          <span class="alert-icon">⚠️</span>
+          <div>
+            <strong>Proyecto Educativo</strong><br>
+            Esta curva es solo para aprendizaje. Para seguridad real, 
+            usa curvas estándar como <code>secp256k1</code>, <code>P-256</code> o <code>ed25519</code>.<br><br>
+            <a href="docs/256-bit-challenge.md" target="_blank" style="color: #667eea; font-weight: 600; text-decoration: underline;">
+              📖 ¿Por qué no usamos curvas de 256 bits? Lee aquí →
+            </a>
           </div>
         </div>
-
-        <div>
-            <h2>📊 Parámetros de la Curva</h2>
-            <div class="params">
-              <div><span class="key">Ecuación:</span> y² = x³ + ax + b (mod p)</div>
-              <div></div>
-              <div><span class="key">p</span> = <span class="value">383</span> <span class="comment">← primo capicúa</span></div>
-              <div><span class="key">a</span> = <span class="value">121</span> <span class="comment">← 11² (capicúa²)</span></div>
-              <div><span class="key">b</span> = <span class="value">11</span> <span class="comment">← capicúa</span></div>
-              <div><span class="key">n</span> = <span class="value">353</span> <span class="comment">← orden (primo)</span></div>
-              <div><span class="key">G</span> = <span class="value">(2, 133)</span> <span class="comment">← punto generador</span></div>
-              <div></div>
-              <div><span class="comment">✓ Discriminante Δ = 4a³ + 27b² ≠ 0</span></div>
-              <div><span class="comment">✓ Orden n es primo</span></div>
-              <div><span class="comment">✓ G genera todo el grupo</span></div>
-            </div>
-        </div>
         
-        <div>
-          <h3>💻 Consola de Operaciones</h3>
-          <div id="output" class="output"></div>
-        </div>
-        
-      </section>
+      </div>
       
-    </main>
+      <!-- PANEL DERECHO: CONSOLA -->
+      <div class="console-panel">
+        <h2>💻 Consola de Operaciones</h2>
+        <div id="output" class="output"></div>
+      </div>
+      
+    </section>
     
-    <!-- SECCIÓN DE ANCHO COMPLETO CON INFO -->
-    <section class="full-width-section">
-      
-      <div class="palindrome-box">
-        <span class="big">¿Dábale arroz a la zorra el abad?</span>
-        Anita lava la tina
-        <span class="big">Yo hago yoga hoy</span>
-        121 · 12321 · 1234554321
-        <span class="big">🦜 Como un loro que repite 🦜</span>
+    <!-- SECCIÓN INFERIOR: PARÁMETROS (ancho completo) -->
+    <section class="bottom-section">
+      <h2>📊 Parámetros de la Curva</h2>
+      <div class="params">
+        <div><span class="key">Ecuación:</span> y² = x³ + ax + b (mod p)</div>
+        <div></div>
+        <div><span class="key">p</span> = <span class="value">383</span> <span class="comment">← primo capicúa</span></div>
+        <div><span class="key">a</span> = <span class="value">121</span> <span class="comment">← 11² (capicúa²)</span></div>
+        <div><span class="key">b</span> = <span class="value">11</span> <span class="comment">← capicúa</span></div>
+        <div><span class="key">n</span> = <span class="value">353</span> <span class="comment">← orden (primo)</span></div>
+        <div><span class="key">G</span> = <span class="value">(2, 133)</span> <span class="comment">← punto generador</span></div>
+        <div></div>
+        <div><span class="comment">✓ Discriminante Δ = 4a³ + 27b² ≠ 0</span></div>
+        <div><span class="comment">✓ Orden n es primo</span></div>
+        <div><span class="comment">✓ G genera todo el grupo</span></div>
       </div>
       
-      <div class="alert alert-info">
-        <span class="alert-icon">ℹ️</span>
-        <div>
-          <strong>¿Qué es CapiCrypto?</strong><br>
-          Una implementación de curvas elípticas criptográficas donde los parámetros 
-          son números <strong>capicúa</strong> (palíndromos).
-        </div>
-      </div>
-      
-      <div class="info-grid">
-        <div class="info-card">
-          <h3>🔐 Firma Digital</h3>
-          <p>Implementa ECDSA con SHA-256 para firmar y verificar mensajes de forma segura.</p>
-        </div>
-        
-        <div class="info-card">
-          <h3>🎲 Claves Aleatorias</h3>
-          <p>Genera pares de claves criptográficas con formato de dirección CapiCrypto único.</p>
-        </div>
-        
-        <div class="info-card">
-          <h3>🪞 Todo Capicúa</h3>
-          <p>Los parámetros se leen igual al derecho y al revés, como un loro que se mira al espejo.</p>
-        </div>
-      </div>
-      
-      <div class="alert alert-warning">
-        <span class="alert-icon">⚠️</span>
-        <div>
-          <strong>Proyecto Educativo</strong><br>
-          Esta curva es solo para aprendizaje. Para seguridad real, 
-          usa curvas estándar como <code>secp256k1</code>, <code>P-256</code> o <code>ed25519</code>.<br><br>
-          <a href="docs/256-bit-challenge.md" target="_blank" style="color: #667eea; font-weight: 600; text-decoration: underline;">
-            📖 ¿Por qué no usamos curvas de 256 bits? Lee aquí →
-          </a>
-        </div>
-      </div>
-      
-      <!-- <div class="alert alert-success">
+      <div class="alert alert-success" style="margin-top: 1.5rem;">
         <span class="alert-icon">✅</span>
         <div>
           <strong>Basado en @noble/curves</strong><br>
           CapiCrypto utiliza <code>@noble/curves</code>, una implementación auditada de curvas elípticas.
         </div>
-      </div> -->
-      
+      </div>
     </section>
     
     <footer>
@@ -982,8 +816,33 @@
     // ============================================
     // MENSAJE INICIAL EN CONSOLA
     // ============================================
-    console.log('%c🦜 CapiCrypto cargado!', 'color: #667eea; font-size: 20px; font-weight: bold;');
-    console.log('%cComo un loro que repite, los capicúas se reflejan', 'color: #764ba2; font-style: italic;');
+    window.addEventListener('load', () => {
+      const output = document.getElementById('output');
+      output.innerHTML = `<span style="color: #00d4ff;">╔═══════════════════════════════════════════════════════╗</span>
+<span style="color: #ffff00; font-size: 1.3rem;">    🦜 BIENVENIDO A CAPICRYPTO 🦜</span>
+<span style="color: #00d4ff;">╚═══════════════════════════════════════════════════════╝</span>
+
+<span style="color: #00ff00;">Sistema de Criptografía con Curvas Elípticas Capicúa</span>
+
+<span style="color: #888;">Como un loro que repite, los números se leen igual</span>
+<span style="color: #888;">del derecho que al revés...</span>
+
+<span style="color: #00d4ff;">═══════════════════════════════════════════════════════</span>
+
+<span style="color: #00d4ff;">🎯 OPERACIONES DISPONIBLES:</span>
+
+  <span style="color: #ffff00;">🎲</span> <span style="color: #fff;">Generar Claves</span> - Crea un par de claves criptográficas
+  <span style="color: #ffff00;">✍️ </span> <span style="color: #fff;">Firmar Mensaje</span> - Firma digitalmente un mensaje
+  <span style="color: #ffff00;">🔍</span> <span style="color: #fff;">Verificar Firma</span> - Comprueba la autenticidad
+  <span style="color: #ffff00;">📊</span> <span style="color: #fff;">Info Técnica</span> - Detalles de la curva elíptica
+
+<span style="color: #00d4ff;">═══════════════════════════════════════════════════════</span>
+
+<span style="color: #888;">💡 Tip: Comienza generando un par de claves con el</span>
+<span style="color: #888;">   botón "🎲 Generar Claves" en el panel izquierdo</span>
+
+<span style="color: #00d4ff;">═══════════════════════════════════════════════════════</span>`;
+    });
   </script>
 </body>
 </html>
