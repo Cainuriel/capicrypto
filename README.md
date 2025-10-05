@@ -70,18 +70,40 @@ a = 11² = 121          // ← ¡capicúa²! 🎯
 
 Como un loro que repite su reflejo infinitamente... 🦜🪞🦜
 
-### 📊 Fundamento Teórico: La Rareza de los Primos Capicúa
+### 📊 Fundamento Teórico: "Casi Todos los Palíndromos son Compuestos"
 
-**Nota Educativa**: Los números capicúa primos son extremadamente raros. Según el paper ["Almost All Palindromes Are Composite"](https://www.jstor.org/stable/4145070) de William D. Banks (2004), la densidad de primos palindrómicos tiende a cero a medida que consideramos números más grandes.
+**Paper de Referencia**: ["Almost All Palindromes Are Composite"](https://www.jstor.org/stable/4145070) de William D. Banks (2004)
+
+**Hallazgo Principal del Paper**: 
+> **"Casi todos los números capicúa son compuestos (no primos)"**
+
+Banks demuestra matemáticamente que:
+- 📉 La densidad de primos palindrómicos tiende a **cero** conforme los números crecen
+- 🔢 La mayoría abrumadora de capicúas son números **compuestos** (tienen factores)
+- ⚠️ Encontrar un capicúa que sea primo es cada vez más **excepcional**
+
+**¿Y los pocos que SÍ son primos?**
+
+Aunque raros, existen capicúas primos (como nuestro `p = 383`). Sin embargo:
+
+```javascript
+// ✅ CAPICÚA PRIMO (raro, pero existe)
+p = 383    // primo Y capicúa - necesario para criptografía
+n = 353    // primo Y capicúa - necesario para el orden
+
+// ❌ CAPICÚA COMPUESTO (la mayoría según Banks)
+121 = 11 × 11    // capicúa pero compuesto - NO sirve como p o n
+1221 = 3 × 11 × 37    // capicúa pero compuesto
+```
 
 **¿Qué significa esto para CapiCrypto?**
 
-- 🎓 **Propósito Educativo**: Encontrar primos capicúa adecuados es un desafío matemático interesante
-- 🔢 **Rareza Estadística**: Los primos palindrómicos son cada vez más escasos conforme aumenta el tamaño
-- ⚠️ **NO mejora la seguridad**: Este paper es puramente teórico/estadístico
-- ✨ **Valor Pedagógico**: Demuestra cómo las propiedades estructurales (simetría) son raras en primos
+- 🎯 **Desafío Aumentado**: Buscar capicúas primos es como "buscar agujas en un pajar"
+- 🔐 **Necesidad Criptográfica**: Solo podemos usar los **raros** capicúas que son primos
+- ⚠️ **NO mejora seguridad**: El paper explica por qué es difícil, no nos da ventaja
+- 🎓 **Valor Educativo**: Demuestra la tensión entre estructura (simetría) y primalidad
 
-**Conclusión**: Los capicúas son fascinantes matemáticamente, pero esta propiedad es **estética y educativa**, no criptográficamente ventajosa. Para seguridad real, usar curvas estándar auditadas.
+**Conclusión**: Los capicúas son fascinantes matemáticamente, pero la mayoría son compuestos. Los pocos que son primos son excepcionales y difíciles de encontrar. Esta propiedad es **estética y educativa**, no criptográficamente ventajosa. Para seguridad real, usar curvas estándar auditadas.
 
 ### Características
 
