@@ -489,14 +489,33 @@ npm run find-order
 
 ¡Las contribuciones son bienvenidas! Especialmente:
 
-1. **Implementación de Schoof's Algorithm** en JavaScript/WASM
-2. Mejoras en el cálculo del orden
-3. Más ejemplos educativos
-4. Documentación adicional
+###  Cálculo del Orden
+
+Actualmente usamos **fuerza bruta** para contar puntos, lo cual solo funciona para curvas pequeñas.
+
+**Necesitamos ayuda con**:
+
+1. **Implementar el Algoritmo de Schoof** 
+   - Con WASM?
+   - Referencias: [Wikipedia](https://en.wikipedia.org/wiki/Schoof%27s_algorithm), [SEA](https://crypto.stanford.edu/pbc/notes/elliptic/sea.html)
+   
+2. **Port desde otras librerías**
+   - SageMath (Python)
+   - PARI/GP (C)
+   - MIRACL (C++)
+
+3. **Optimizaciones del método actual**
+   - Paralelización con Workers
+   - Algoritmos híbridos (Baby-step Giant-step + conteo)
+   - Aprovechar simetría de la curva
+
+**¿Por qué es importante?**
+Sin un cálculo eficiente de `n`, no podemos usar curvas de 256 bits (nivel de seguridad real). 
+Actualmente solo funcionamos con p=383 por esta limitación.
 
 ---
 
-## 📚 Recursos Educativos
+## 📚 Recursos
 
 ### Curvas Elípticas
 
@@ -520,9 +539,6 @@ npm run find-order
 ## ⚖️ Licencia
 
 MIT License - Ver [LICENSE](LICENSE) para más detalles.
-
----
-
 
 ---
 
