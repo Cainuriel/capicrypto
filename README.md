@@ -7,6 +7,8 @@
 [![Node.js](https://img.shields.io/badge/node-%3E%3D20.0.0-brightgreen.svg)](https://nodejs.org/)
 [![Cryptography](https://img.shields.io/badge/crypto-educational-blue.svg)]()
 
+![CapiCrypto Web Interface](assets/web.jpg)
+
 ---
 
 ## 🎯 ¿Qué es CapiCrypto?
@@ -336,6 +338,8 @@ modSqrt(a, p)       // Raíz cuadrada modular (Tonelli-Shanks)
 🧪 Probando mensaje alterado...
 ✓ Verificación: ❌ INVÁLIDA (esperado)
 ```
+
+![Verificación de Firma Digital](assets/web2.jpg)
 
 ---
 

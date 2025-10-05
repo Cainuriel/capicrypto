@@ -216,7 +216,7 @@
       transform: translateY(-3px);
     }
     
-    /* CONSOLA - más grande y sticky */
+    /* CONSOLA */
     .output {
       background: #1e1e1e;
       color: #00ff00;
@@ -227,8 +227,9 @@
       overflow-x: auto;
       white-space: pre-wrap;
       word-wrap: break-word;
-      min-height: 600px;
-      max-height: calc(100vh - 300px);
+      /* Ajuste de altura para acomodar la otra consola */
+      min-height: 400px; 
+      max-height: calc(100vh - 500px);
       overflow-y: auto;
       border: 2px solid #667eea;
       box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
@@ -358,7 +359,7 @@
     
     h2 {
       color: #667eea;
-      margin: 1.5rem 0 1rem 0;
+      margin-bottom: 1rem;
       font-size: 1.5rem;
     }
     
@@ -400,17 +401,14 @@
 </head>
 <body>
   <div class="container">
-    <div class="header">
+    <header class="header">
       <h1>🦜 CapiCrypto</h1>
       <p class="subtitle">Criptografía de Curvas Elípticas con Números Capicúa</p>
-    </div>
+    </header>
     
-    <div class="content">
+    <main class="content">
       
-      <!-- ============================================ -->
-      <!-- PANEL IZQUIERDO: CONTROLES E INFORMACIÓN    -->
-      <!-- ============================================ -->
-      <div class="left-panel">
+      <section class="left-panel">
         
         <div class="palindrome-box">
           <span class="big">¿Dábale arroz a la zorra el abad?</span>
@@ -427,22 +425,6 @@
             Una implementación de curvas elípticas criptográficas donde los parámetros 
             son números <strong>capicúa</strong> (palíndromos).
           </div>
-        </div>
-        
-        <h2>📊 Parámetros de la Curva</h2>
-        
-        <div class="params">
-<div><span class="key">Ecuación:</span> y² = x³ + ax + b (mod p)</div>
-<div></div>
-<div><span class="key">p</span> = <span class="value">383</span> <span class="comment">← primo capicúa</span></div>
-<div><span class="key">a</span> = <span class="value">121</span> <span class="comment">← 11² (capicúa²)</span></div>
-<div><span class="key">b</span> = <span class="value">11</span> <span class="comment">← capicúa</span></div>
-<div><span class="key">n</span> = <span class="value">353</span> <span class="comment">← orden (primo)</span></div>
-<div><span class="key">G</span> = <span class="value">(2, 133)</span> <span class="comment">← punto generador</span></div>
-<div></div>
-<div><span class="comment">✓ Discriminante Δ = 4a³ + 27b² ≠ 0</span></div>
-<div><span class="comment">✓ Orden n es primo</span></div>
-<div><span class="comment">✓ G genera todo el grupo</span></div>
         </div>
         
         <div class="info-grid">
@@ -473,7 +455,6 @@
           </button>
         </div>
         
-        <!-- Formulario para firmar mensaje -->
         <div>
           <h3>✍️ Firmar Mensaje</h3>
           <div class="form-box">
@@ -485,7 +466,6 @@
           </div>
         </div>
         
-        <!-- Formulario para verificar mensaje -->
         <div>
           <h3>🔍 Verificar Firma</h3>
           <div class="form-box">
@@ -506,7 +486,6 @@
           </div>
         </div>
         
-        <!-- ALERTA CON ENLACE A 256-BIT-CHALLENGE.MD -->
         <div class="alert alert-warning">
           <span class="alert-icon">⚠️</span>
           <div>
@@ -527,12 +506,9 @@
           </div>
         </div>
         
-      </div>
+      </section>
       
-      <!-- ============================================ -->
-      <!-- PANEL DERECHO: CONSOLA DE OPERACIONES       -->
-      <!-- ============================================ -->
-      <div class="right-panel">
+      <section class="right-panel">
         
         <div id="addressDisplay" style="display: none;">
           <div class="address-display">
@@ -541,15 +517,32 @@
             <button class="copy-btn" onclick="copyAddress()">📋 Copiar Dirección</button>
           </div>
         </div>
+
+        <div>
+            <h2>📊 Parámetros de la Curva</h2>
+            <div class="params">
+              <div><span class="key">Ecuación:</span> y² = x³ + ax + b (mod p)</div>
+              <div></div>
+              <div><span class="key">p</span> = <span class="value">383</span> <span class="comment">← primo capicúa</span></div>
+              <div><span class="key">a</span> = <span class="value">121</span> <span class="comment">← 11² (capicúa²)</span></div>
+              <div><span class="key">b</span> = <span class="value">11</span> <span class="comment">← capicúa</span></div>
+              <div><span class="key">n</span> = <span class="value">353</span> <span class="comment">← orden (primo)</span></div>
+              <div><span class="key">G</span> = <span class="value">(2, 133)</span> <span class="comment">← punto generador</span></div>
+              <div></div>
+              <div><span class="comment">✓ Discriminante Δ = 4a³ + 27b² ≠ 0</span></div>
+              <div><span class="comment">✓ Orden n es primo</span></div>
+              <div><span class="comment">✓ G genera todo el grupo</span></div>
+            </div>
+        </div>
         
         <div>
           <h3>💻 Consola de Operaciones</h3>
           <div id="output" class="output"></div>
         </div>
         
-      </div>
+      </section>
       
-    </div>
+    </main>
     
     <footer>
       <p>
@@ -592,15 +585,15 @@
 <span style="color: #00ff00;">✅ Claves generadas exitosamente!</span>
 
 <span style="color: #00d4ff;">🔐 CLAVE PRIVADA:</span>
-   Hex: <span style="color: #ffff00;">0x${privateKey}</span>
-   
+    Hex: <span style="color: #ffff00;">0x${privateKey}</span>
+    
 <span style="color: #00d4ff;">🔓 CLAVE PÚBLICA:</span>
-   Hex: <span style="color: #ffff00;">${publicKey}</span>
-   Punto X: <span style="color: #ffff00;">${pubX}</span>
-   Punto Y: <span style="color: #ffff00;">${pubY}</span>
+    Hex: <span style="color: #ffff00;">${publicKey}</span>
+    Punto X: <span style="color: #ffff00;">${pubX}</span>
+    Punto Y: <span style="color: #ffff00;">${pubY}</span>
 
 <span style="color: #00d4ff;">🏠 DIRECCIÓN CAPICRYPTO:</span>
-   <span style="color: #ffff00;">${address}</span>
+    <span style="color: #ffff00;">${address}</span>
 
 <span style="color: #00d4ff;">═══════════════════════════════════════════════════════</span>
 <span style="color: #00ff00;">✓ Verificación de punto en curva: OK ✅</span>`;
@@ -643,17 +636,17 @@
 <span style="color: #00d4ff;">═══════════════════════════════════════════════════════</span>
 
 <span style="color: #00d4ff;">📝 MENSAJE:</span>
-   "<span style="color: #fff;">${currentMessage}</span>"
+    "<span style="color: #fff;">${currentMessage}</span>"
 
 <span style="color: #00ff00;">✅ Firma generada correctamente!</span>
 
 <span style="color: #00d4ff;">📋 FIRMA ECDSA (128 hex chars):</span>
-   <span style="color: #ffff00;">${signature.slice(0, 64)}</span>
-   <span style="color: #ffff00;">${signature.slice(64)}</span>
+    <span style="color: #ffff00;">${signature.slice(0, 64)}</span>
+    <span style="color: #ffff00;">${signature.slice(64)}</span>
 
 <span style="color: #00d4ff;">🔢 COMPONENTES:</span>
-   <span style="color: #00d4ff;">r</span> = <span style="color: #ffff00;">${r}</span>
-   <span style="color: #00d4ff;">s</span> = <span style="color: #ffff00;">${s}</span>
+    <span style="color: #00d4ff;">r</span> = <span style="color: #ffff00;">${r}</span>
+    <span style="color: #00d4ff;">s</span> = <span style="color: #ffff00;">${s}</span>
 
 <span style="color: #00d4ff;">═══════════════════════════════════════════════════════</span>
 <span style="color: #888;">💡 Campos de verificación rellenados automáticamente</span>`;
@@ -683,16 +676,16 @@
       
       // Verificar si el mensaje y firma coinciden con los generados
       const isOriginal = currentSignature && 
-                        message === currentSignature.message && 
-                        signature === currentSignature.signature;
+                         message === currentSignature.message && 
+                         signature === currentSignature.signature;
       
       const isMessageModified = currentSignature && 
-                               message !== currentSignature.message &&
-                               signature === currentSignature.signature;
+                                message !== currentSignature.message &&
+                                signature === currentSignature.signature;
       
       const isSignatureModified = currentSignature &&
-                                 message === currentSignature.message &&
-                                 signature !== currentSignature.signature;
+                                  message === currentSignature.message &&
+                                  signature !== currentSignature.signature;
       
       let resultIcon = '✅';
       let resultText = 'FIRMA VÁLIDA';
@@ -729,11 +722,11 @@
 <span style="color: #00d4ff;">═══════════════════════════════════════════════════════</span>
 
 <span style="color: #00d4ff;">📝 MENSAJE RECIBIDO:</span>
-   "${message.length > 60 ? message.slice(0, 60) + '...' : message}"
+    "${message.length > 60 ? message.slice(0, 60) + '...' : message}"
 
 <span style="color: #00d4ff;">📋 FIRMA RECIBIDA:</span>
-   ${signature.slice(0, 64)}
-   ${signature.length > 64 ? signature.slice(64, 128) : ''}
+    ${signature.slice(0, 64)}
+    ${signature.length > 64 ? signature.slice(64, 128) : ''}
 
 <span style="color: #00d4ff;">───────────────────────────────────────────────────────</span>
 
@@ -755,37 +748,37 @@
 <span style="color: #00d4ff;">═══════════════════════════════════════════════════════</span>
 
 <span style="color: #00d4ff;">ECUACIÓN DE WEIERSTRASS:</span>
-   <span style="color: #ffff00;">y² ≡ x³ + ax + b (mod p)</span>
+    <span style="color: #ffff00;">y² ≡ x³ + ax + b (mod p)</span>
 
 <span style="color: #00d4ff;">PARÁMETROS CAPICÚA:</span>
-   <span style="color: #00d4ff;">p</span> = <span style="color: #ffff00;">383</span>     <span style="color: #888;">← campo primo capicúa</span>
-   <span style="color: #00d4ff;">n</span> = <span style="color: #ffff00;">353</span>     <span style="color: #888;">← orden del grupo (primo)</span>
-   <span style="color: #00d4ff;">a</span> = <span style="color: #ffff00;">121</span>     <span style="color: #888;">← 11² (capicúa²)</span>
-   <span style="color: #00d4ff;">b</span> = <span style="color: #ffff00;">11</span>      <span style="color: #888;">← capicúa</span>
+    <span style="color: #00d4ff;">p</span> = <span style="color: #ffff00;">383</span>      <span style="color: #888;">← campo primo capicúa</span>
+    <span style="color: #00d4ff;">n</span> = <span style="color: #ffff00;">353</span>      <span style="color: #888;">← orden del grupo (primo)</span>
+    <span style="color: #00d4ff;">a</span> = <span style="color: #ffff00;">121</span>      <span style="color: #888;">← 11² (capicúa²)</span>
+    <span style="color: #00d4ff;">b</span> = <span style="color: #ffff00;">11</span>       <span style="color: #888;">← capicúa</span>
 
 <span style="color: #00d4ff;">PUNTO GENERADOR G:</span>
-   <span style="color: #00d4ff;">x</span> = <span style="color: #ffff00;">2</span>
-   <span style="color: #00d4ff;">y</span> = <span style="color: #ffff00;">133</span>
+    <span style="color: #00d4ff;">x</span> = <span style="color: #ffff00;">2</span>
+    <span style="color: #00d4ff;">y</span> = <span style="color: #ffff00;">133</span>
 
 <span style="color: #00d4ff;">TEOREMA DE HASSE:</span>
-   |n - (p+1)| ≤ 2√p
-   |353 - 384| = 31 ≤ 39.19 <span style="color: #00ff00;">✓</span>
+    |n - (p+1)| ≤ 2√p
+    |353 - 384| = 31 ≤ 39.19 <span style="color: #00ff00;">✓</span>
 
 <span style="color: #00d4ff;">PROPIEDADES:</span>
-   <span style="color: #00ff00;">✓</span> Discriminante Δ = 4a³ + 27b² ≠ 0
-   <span style="color: #00ff00;">✓</span> Orden n es primo
-   <span style="color: #00ff00;">✓</span> G genera todo el grupo
+    <span style="color: #00ff00;">✓</span> Discriminante Δ = 4a³ + 27b² ≠ 0
+    <span style="color: #00ff00;">✓</span> Orden n es primo
+    <span style="color: #00ff00;">✓</span> G genera todo el grupo
 
 <span style="color: #00d4ff;">ALGORITMOS IMPLEMENTADOS:</span>
-   • ECDSA (Elliptic Curve Digital Signature Algorithm)
-   • SHA-256 para hashing
-   • RFC 6979 (firmas determinísticas)
+    • ECDSA (Elliptic Curve Digital Signature Algorithm)
+    • SHA-256 para hashing
+    • RFC 6979 (firmas determinísticas)
 
 <span style="color: #00d4ff;">NIVEL DE SEGURIDAD:</span>
-   Bits: <span style="color: #ffff00;">~9 bits</span> <span style="color: #888;">(solo educativo)</span>
-   
-   <span style="color: #ff6600;">⚠️  Para producción usar ≥256 bits</span>
-   <span style="color: #888;">   Ejemplos: secp256k1, P-256, ed25519</span>
+    Bits: <span style="color: #ffff00;">~9 bits</span> <span style="color: #888;">(solo educativo)</span>
+    
+    <span style="color: #ff6600;">⚠️  Para producción usar ≥256 bits</span>
+    <span style="color: #888;">   Ejemplos: secp256k1, P-256, ed25519</span>
 
 <span style="color: #00d4ff;">═══════════════════════════════════════════════════════</span>`;
     }
@@ -845,36 +838,36 @@
 <span style="color: #00d4ff;">═══════════════════════════════════════════════════════</span>
 
 <span style="color: #00d4ff;">📋 FIRMA COMPLETA (hex):</span>
-   ${signature.slice(0, 64)}
-   ${signature.length > 64 ? signature.slice(64, 128) : ''}
-   
-   <span style="color: #888;">Formato: ${signatureFormat}</span>
-   <span style="color: ${isValid ? '#00ff00' : '#ff6600'};">${isValid ? '✓ Formato válido' : '⚠ Formato no estándar'}</span>
+    ${signature.slice(0, 64)}
+    ${signature.length > 64 ? signature.slice(64, 128) : ''}
+    
+    <span style="color: #888;">Formato: ${signatureFormat}</span>
+    <span style="color: ${isValid ? '#00ff00' : '#ff6600'};">${isValid ? '✓ Formato válido' : '⚠ Formato no estándar'}</span>
 
 <span style="color: #00d4ff;">─────────────────────────────────────────────────────</span>
 
 <span style="color: #00d4ff;">🔢 COMPONENTE R:</span>
-   Hex: <span style="color: #ffff00;">${rComponent}</span>
-   Dec: <span style="color: #ffff00;">${rDecimal}</span>
-   
-   <span style="color: #888;">En ECDSA, 'r' es la coordenada X del punto R = k·G</span>
+    Hex: <span style="color: #ffff00;">${rComponent}</span>
+    Dec: <span style="color: #ffff00;">${rDecimal}</span>
+    
+    <span style="color: #888;">En ECDSA, 'r' es la coordenada X del punto R = k·G</span>
 
 <span style="color: #00d4ff;">─────────────────────────────────────────────────────</span>
 
 <span style="color: #00d4ff;">🔢 COMPONENTE S:</span>
-   Hex: <span style="color: #ffff00;">${sComponent}</span>
-   Dec: <span style="color: #ffff00;">${sDecimal}</span>
-   
-   <span style="color: #888;">En ECDSA, s = k⁻¹(z + r·d) mod n</span>
+    Hex: <span style="color: #ffff00;">${sComponent}</span>
+    Dec: <span style="color: #ffff00;">${sDecimal}</span>
+    
+    <span style="color: #888;">En ECDSA, s = k⁻¹(z + r·d) mod n</span>
 
 <span style="color: #00d4ff;">═══════════════════════════════════════════════════════</span>
 
 <span style="color: #00d4ff;">💡 CÓMO FUNCIONA LA VERIFICACIÓN:</span>
 
-   1. <span style="color: #888;">Se calcula u₁ = z·s⁻¹ mod n</span>
-   2. <span style="color: #888;">Se calcula u₂ = r·s⁻¹ mod n</span>
-   3. <span style="color: #888;">Se calcula el punto P = u₁·G + u₂·Q</span>
-   4. <span style="color: #888;">La firma es válida si P.x ≡ r (mod n)</span>
+    1. <span style="color: #888;">Se calcula u₁ = z·s⁻¹ mod n</span>
+    2. <span style="color: #888;">Se calcula u₂ = r·s⁻¹ mod n</span>
+    3. <span style="color: #888;">Se calcula el punto P = u₁·G + u₂·Q</span>
+    4. <span style="color: #888;">La firma es válida si P.x ≡ r (mod n)</span>
 
 <span style="color: #00d4ff;">═══════════════════════════════════════════════════════</span>`;
     }
