@@ -523,21 +523,6 @@ MIT License - Ver [LICENSE](LICENSE) para más detalles.
 
 ---
 
-## 🦜 ¿Por qué Capicúas?
-
-Los números capicúa (o palíndromos numéricos) son fascinantes:
-
-- **121** es capicúa
-- **1221** es capicúa
-- **12321** es capicúa
-- **123454321** es capicúa
-
-En criptografía, usualmente usamos números primos grandes y "aleatorios". Pero, ¿qué pasaría si usáramos números con estructura? ¡Este proyecto explora esa idea!
-
-**Disclaimer**: Esto es un proyecto **educativo**. No uses esta curva para aplicaciones de seguridad real. Para eso, usa curvas estándar auditadas como:
-- `secp256k1` (Bitcoin)
-- `P-256` / `prime256v1` (NIST)
-- `ed25519` (EdDSA)
 
 ---
 
