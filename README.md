@@ -37,12 +37,45 @@ a = 12345678987654321  // ← ¡se lee igual al revés!
 b = 98765432123456789  // ← ¡capicúa también!
 ```
 
+### 🪞 La Magia Multiplicadora de los Capicúas
+
+¡Como un loro que se mira al espejo y se multiplica por sí mismo! Algunos números capicúa tienen una propiedad especial:
+
+**Cuando los multiplicas, ¡generan nuevos capicúas!**
+
+```javascript
+// 🦜 NIVEL 1: Capicúa base
+11 × 11 = 121           // ← ¡11² es capicúa!
+
+// 🦜 NIVEL 2: Capicúa de capicúa
+121 × 121 = 14641       // ← ¡121² también es capicúa!
+
+// 🦜 NIVEL 3: El reflejo continúa...
+111 × 111 = 12321       // ← ¡111² es capicúa!
+1111 × 1111 = 1234321   // ← ¡El patrón se mantiene!
+
+// 🦜 EJEMPLOS EN CAPICRYPTO:
+// Base capicúa
+base_a = 11             // capicúa
+
+// Cuadrado capicúa (el loro se multiplica)
+a = 11² = 121          // ← ¡capicúa²! 🎯
+```
+
+**Esta propiedad hace que nuestros parámetros sean doblemente especiales:**
+1. Son capicúa por sí mismos (11, 121)
+2. Son el resultado de multiplicar capicúas por sí mismos (11 × 11)
+
+Como un loro que repite su reflejo infinitamente... 🦜🪞🦜
+
 ### Características
 
 - ✅ **Curva válida**: Discriminante Δ = 4a³ + 27b² ≠ 0
 - ✅ **Punto generador G** verificado en la curva
 - ✅ **ECDSA signatures** con SHA-256
 - ✅ **Basado en @noble/curves** (librería auditada)
+- ✅ **Formato de dirección propio**: `CAPI:...` único e identificable
+- ✅ **Generación aleatoria de claves** con función exportada
 - 🎓 **Propósito educativo**: Aprender cómo funcionan las curvas elípticas
 
 ---
@@ -68,6 +101,7 @@ npm start
 Esto generará:
 - 🔑 Par de claves (privada/pública)
 - 📊 Parámetros de la curva capicúa
+- 🏠 **Dirección CapiCrypto** (formato `CAPI:...`)
 - ✅ Verificación de que los puntos están en la curva
 
 ### 2. Firmar y verificar mensajes
@@ -82,7 +116,20 @@ Demuestra:
 - ❌ Detección de mensajes alterados
 - 🔒 Detección de claves incorrectas
 
-### 3. Ejecutar todo
+### 3. Interfaz Web Interactiva 🌐
+
+```bash
+npm run web
+```
+
+Abre una interfaz web bonita donde puedes:
+- 🎲 Generar claves aleatorias
+- ✍️ Firmar mensajes
+- 🔍 Verificar firmas
+- 📊 Ver información técnica
+- 🦜 ¡Todo con estilo capicúa!
+
+### 4. Ejecutar todo
 
 ```bash
 npm run all
@@ -92,46 +139,67 @@ npm run all
 
 ## 📐 Parámetros de la Curva
 
-### Versión Actual (Educativa)
+### Versión Actual (Educativa) - p=383
 
-Para fines demostrativos, usamos una curva más pequeña donde podemos calcular el orden `n` rápidamente:
+Para fines demostrativos, usamos una curva más pequeña donde podemos calcular el orden `n` rápidamente.
 
-```javascript
-// 🔢 Parámetros más pequeños (64-128 bits)
-p = número primo capicúa pequeño
-a = 12321          // capicúa
-b = 54345          // capicúa
-```
-
-### ⚠️ Limitación Actual: Curvas de 256 bits
-
-Para una curva de 256 bits (nivel de seguridad real), necesitamos:
+**¡Con parámetros capicúa encontrados por nuestro buscador!**
 
 ```javascript
-// 🔒 Parámetros de seguridad real (256 bits)
-p = 2^256 - 189    // primo grande
-a = 12345678987654321
-b = 98765432123456789
-G = [4, 767701094043867...] // punto generador
+// 🦜 PARÁMETROS CAPICÚA EDUCATIVOS
+p = 383              // ← ¡primo capicúa!
+n = 353              // ← orden (también primo)
+h = 1                // ← cofactor
+
+// 🪞 La magia multiplicadora
+base_a = 11          // capicúa base
+base_b = 11          // capicúa base
+
+a = 11 × 11 = 121   // ← ¡capicúa²! El loro se multiplica
+b = 11              // ← capicúa
+
+G = (2, 133)        // ← punto generador verificado
 ```
 
-**Problema**: Calcular el orden `n` del grupo generado por `G` requiere:
+**Propiedades verificadas:**
+- ✅ `p = 383` es primo Y capicúa
+- ✅ `n = 353` es primo (orden del grupo)
+- ✅ `a = 121` es capicúa² (11 × 11)
+- ✅ `b = 11` es capicúa
+- ✅ Discriminante: Δ = 4(121³) + 27(11²) ≠ 0
+- ✅ Teorema de Hasse: |353 - 384| = 31 ≤ 2√383 ≈ 39.19
 
-#### 🧮 Algoritmo de Schoof
+### 🏠 Formato de Dirección CapiCrypto
 
-El **algoritmo de Schoof** (o su variante SEA - Schoof-Elkies-Atkin) es necesario para contar puntos en curvas elípticas grandes:
+Las claves públicas se presentan en un formato único:
 
 ```
-Complejidad: O(log⁸ p)  para Schoof
-            O(log⁶ p)  para SEA
+CAPI:239A11504A21F344B93C6D9EF184B2A9:ABCD
+ ↑    ↑                                ↑
+ │    │                                └─ Checksum (4 chars)
+ │    └─────────────────────────────────── Dirección (32 chars)
+ └──────────────────────────────────────── Prefijo CapiCrypto
 ```
 
-Para `p ≈ 2^256`, esto requiere:
-- Días o semanas de cómputo
-- Implementación en C++/Rust
-- Librerías especializadas (MIRACL, Pari-GP, SageMath)
+**Características:**
+- 🦜 Formato nativo (no confundir con Ethereum)
+- ✨ Derivado de las coordenadas (X, Y) de la clave pública
+- 🔒 Checksum para validación visual
+- 📱 Compatible con QR codes
 
-**JavaScript puro NO es adecuado para este cálculo.**
+### ⚠️ Limitación: Curvas de 256 bits
+
+Para una curva de 256 bits (nivel de seguridad real), necesitamos calcular el orden `n` con el algoritmo de Schoof:
+
+**Problema**: JavaScript puro NO es adecuado para este cálculo.
+
+- Complejidad: O(log⁸ p) para Schoof
+- Para p ≈ 2^256: días o semanas de cómputo
+- Se requiere C++/Rust con MIRACL o SageMath
+
+📖 **[Lee la explicación completa aquí: El Desafío de 256 Bits](docs/256-bit-challenge.md)**
+
+Por eso optamos por la curva educativa p=383 donde el orden se puede calcular en < 1 segundo.
 
 ---
 
@@ -167,17 +235,24 @@ Sin el orden correcto, **no podemos firmar**:
 
 ```
 capicrypto/
-├── 📄 index.js              # Generación de curva y claves
-├── ✍️ sign.js                # Firma y verificación ECDSA
-├── 🧪 test.js                # Suite de pruebas (legacy)
-├── 🔍 calculate-order.js     # Intento de calcular orden
-├── 🎯 find-point.js          # Encontrar puntos en curva
+├── 📄 index.js              # Generación de curva y claves con dirección CAPI:
+├── ✍️  sign.js               # Firma y verificación ECDSA
+├── 🌐 index.html            # Interfaz web interactiva
+├── � package.json          # Configuración y scripts npm
+├── 📖 README.md             # Documentación (este archivo)
 ├── 📚 docs/
-│   ├── CONTEXTO.md          # Contexto original del proyecto
-│   ├── eliptics.md          # Documentación de elliptic.js (legacy)
-│   └── noble-curves-custom-weierstrass.md  # Guía @noble/curves
-├── 📦 package.json
-└── 📖 README.md             # ¡Estás aquí! 🦜
+│   ├── CONTEXTO.md          # Información para IAs (contexto del proyecto)
+│   ├── eliptics.md          # Documentación elliptic.js (legacy)
+│   ├── noble-curves.md      # Documentación @noble/curves
+│   ├── noble-curves-custom-weierstrass.md  # Guía curvas custom
+│   ├── 🔧 tools/            # Scripts auxiliares de desarrollo
+│   │   ├── calculate-order.js    # Calculadora de orden (256 bits)
+│   │   ├── find-good-curve.js    # Buscador de curvas capicúa
+│   │   └── find-point.js         # Buscador de puntos en curva
+│   └── � legacy/           # Código obsoleto/histórico
+│       ├── index-old.js          # Versión antigua del proyecto
+│       └── test.js               # Tests legacy
+└── node_modules/            # Dependencias
 ```
 
 ---
@@ -245,7 +320,7 @@ modSqrt(a, p)       // Raíz cuadrada modular (Tonelli-Shanks)
 ```
 🔐 === FIRMA Y VERIFICACIÓN === 🔐
 
-📝 Mensaje: Hola Fernando, esta es tu curva capicúa 🦜
+📝 Mensaje: Hola humano, esta es tu curva capicúa 🦜
 
 ✍️  Firmando mensaje...
 ✅ Firma generada!
@@ -282,7 +357,74 @@ modSqrt(a, p)       // Raíz cuadrada modular (Tonelli-Shanks)
 
 ### Ideas Adicionales
 
-- [ ] Interfaz web interactiva
+- [x] Interfaz web interactiva ✨
+- [x] Formato de dirección propio `CAPI:...`
+- [x] Generación aleatoria de claves
+- [ ] Visualización de la curva elíptica
+- [ ] QR codes para direcciones
+- [ ] Explorador de transacciones simulado
+
+---
+
+## 🎨 Formato de Dirección Único
+
+CapiCrypto usa su propio formato de dirección, claramente diferenciado:
+
+```
+╭─────────────────────────────────────────╮
+│  🦜  CAPI:239A11504A21F344B93C6D9EF...  │
+│      ...184B2A9:ABCD                    │
+╰─────────────────────────────────────────╯
+```
+
+**¿Por qué no Ethereum-like (0x...)?**
+
+❌ **Formato 0x...** confundiría con Ethereum:
+- Parece compatible pero NO lo es
+- Genera expectativas falsas
+- Va contra el propósito educativo
+
+✅ **Formato CAPI:...** es claro y honesto:
+- Identidad única de CapiCrypto
+- No se confunde con otros sistemas
+- Muestra cómo derivar direcciones de claves públicas
+- Como un loro que tiene su propia voz 🦜
+
+---
+
+## 🧮 La Ciencia de los Capicúas Multiplicadores
+
+### Secuencia de Capicúas Cuadrados
+
+```
+11² = 121
+111² = 12321
+1111² = 1234321
+11111² = 123454321
+111111² = 12345654321
+```
+
+**Patrón observable:**
+- El resultado siempre es capicúa
+- Sigue la secuencia 1,2,3...N...3,2,1
+- Funciona para cualquier longitud de 1's
+
+### Aplicación en CapiCrypto
+
+```javascript
+// Base capicúa
+const base_a = 11n;
+
+// El loro se multiplica por sí mismo
+const a = base_a * base_a;  // 121
+
+// Resultado: ¡capicúa²!
+// - Es capicúa (1-2-1)
+// - Es el cuadrado de un capicúa (11²)
+// - Mantiene propiedades matemáticas para la curva
+```
+
+Esta propiedad hace que nuestros parámetros sean matemáticamente elegantes y conceptualmente coherentes con el tema del proyecto. 🦜🪞
 - [ ] Visualización de la curva elíptica
 - [ ] Comparación con curvas estándar (secp256k1, P-256)
 - [ ] Generar más curvas capicúa con distintos tamaños
@@ -362,7 +504,7 @@ En criptografía, usualmente usamos números primos grandes y "aleatorios". Pero
 
 ## 👨‍💻 Autor
 
-**Fernando** - Explorador de curvas elípticas y amante de los capicúas 🦜
+**Fernando** - Explorador de curvas elípticas y amante de los las les capicúas 🦜
 
 ---
 

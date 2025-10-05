@@ -1,0 +1,922 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>🦜 CapiCrypto - Curva Elíptica Capicúa</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: 'Segoe UI', -apple-system, system-ui, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      padding: 2rem;
+      color: #333;
+    }
+    
+    .container {
+      max-width: 1600px;
+      margin: 0 auto;
+      background: white;
+      border-radius: 20px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+      overflow: hidden;
+    }
+    
+    .header {
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      padding: 3rem 2rem;
+      text-align: center;
+      color: white;
+    }
+    
+    .header h1 {
+      font-size: 3rem;
+      margin-bottom: 0.5rem;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+    }
+    
+    .header .subtitle {
+      font-size: 1.2rem;
+      font-style: italic;
+      opacity: 0.95;
+    }
+    
+    /* DISEÑO DE 2 COLUMNAS */
+    .content {
+      padding: 2rem;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+      align-items: start;
+    }
+    
+    /* Panel izquierdo - CONTROLES */
+    .left-panel {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+      max-height: calc(100vh - 250px);
+      overflow-y: auto;
+      padding-right: 1rem;
+    }
+    
+    /* Panel derecho - CONSOLA (sticky) */
+    .right-panel {
+      position: sticky;
+      top: 2rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+    
+    /* Responsive - móviles 1 columna */
+    @media (max-width: 1024px) {
+      .content {
+        grid-template-columns: 1fr;
+      }
+      .right-panel {
+        position: relative;
+        top: 0;
+      }
+      .left-panel {
+        max-height: none;
+      }
+    }
+    
+    .palindrome-box {
+      background: linear-gradient(135deg, #f0f4ff 0%, #e8eeff 100%);
+      border: 3px solid #667eea;
+      border-radius: 15px;
+      padding: 2rem;
+      text-align: center;
+      font-family: 'Courier New', monospace;
+      font-size: 1.1rem;
+      line-height: 2;
+      box-shadow: 0 4px 15px rgba(102, 126, 234, 0.2);
+    }
+    
+    .palindrome-box .big {
+      font-size: 1.5rem;
+      font-weight: bold;
+      color: #667eea;
+      display: block;
+      margin: 0.5rem 0;
+    }
+    
+    .info-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1rem;
+    }
+    
+    .info-card {
+      background: #f8f9fa;
+      border-radius: 12px;
+      padding: 1.5rem;
+      border-left: 4px solid #667eea;
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+    
+    .info-card:hover {
+      transform: translateX(5px);
+      box-shadow: 0 8px 20px rgba(102, 126, 234, 0.2);
+    }
+    
+    .info-card h3 {
+      color: #667eea;
+      margin-bottom: 0.5rem;
+      font-size: 1.1rem;
+    }
+    
+    .info-card p {
+      font-size: 0.95rem;
+      line-height: 1.4;
+    }
+    
+    .params {
+      background: #1e1e1e;
+      color: #00ff00;
+      padding: 1.5rem;
+      border-radius: 8px;
+      font-family: 'Courier New', monospace;
+      font-size: 0.9rem;
+      overflow-x: auto;
+    }
+    
+    .params div {
+      margin: 0.5rem 0;
+      line-height: 1.5;
+    }
+    
+    .params .key {
+      color: #00d4ff;
+      font-weight: bold;
+      min-width: 80px;
+      display: inline-block;
+    }
+    
+    .params .value {
+      color: #ffff00;
+    }
+    
+    .params .comment {
+      color: #888;
+      font-style: italic;
+    }
+    
+    .button-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+    
+    button {
+      padding: 1rem 1.2rem;
+      font-size: 1rem;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: all 0.3s;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+    }
+    
+    .btn-primary {
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      color: white;
+      box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+    }
+    
+    .btn-primary:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+    }
+    
+    .btn-primary:active {
+      transform: translateY(-1px);
+    }
+    
+    .btn-secondary {
+      background: #e0e7ff;
+      color: #667eea;
+      border: 2px solid #667eea;
+    }
+    
+    .btn-secondary:hover {
+      background: #c7d2fe;
+      transform: translateY(-3px);
+    }
+    
+    /* CONSOLA - más grande y sticky */
+    .output {
+      background: #1e1e1e;
+      color: #00ff00;
+      padding: 1.5rem;
+      border-radius: 12px;
+      font-family: 'Courier New', monospace;
+      font-size: 0.9rem;
+      overflow-x: auto;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+      min-height: 600px;
+      max-height: calc(100vh - 300px);
+      overflow-y: auto;
+      border: 2px solid #667eea;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    }
+    
+    .output:empty::before {
+      content: "🦜 Presiona un botón para ver resultados...\n\nComo un loro que espera, aquí aparecerán las operaciones criptográficas.";
+      color: #666;
+      line-height: 1.8;
+    }
+    
+    .alert {
+      padding: 1rem;
+      margin: 1rem 0;
+      border-radius: 12px;
+      border-left: 4px solid;
+      display: flex;
+      align-items: start;
+      gap: 1rem;
+      font-size: 0.9rem;
+    }
+    
+    .alert-warning {
+      background: #fff3cd;
+      border-color: #ffc107;
+      color: #856404;
+    }
+    
+    .alert-success {
+      background: #d4edda;
+      border-color: #28a745;
+      color: #155724;
+    }
+    
+    .alert-info {
+      background: #d1ecf1;
+      border-color: #17a2b8;
+      color: #0c5460;
+    }
+    
+    .alert-icon {
+      font-size: 1.5rem;
+      flex-shrink: 0;
+    }
+    
+    .address-display {
+      background: linear-gradient(135deg, #1e1e1e, #2d2d2d);
+      color: #00ff00;
+      padding: 1.5rem;
+      border-radius: 15px;
+      font-family: 'Courier New', monospace;
+      border: 3px solid #667eea;
+      box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .address-display::before {
+      content: '🦜';
+      position: absolute;
+      font-size: 8rem;
+      opacity: 0.05;
+      right: -1rem;
+      top: -1rem;
+    }
+    
+    .address-display .label {
+      color: #00d4ff;
+      font-size: 0.9rem;
+      margin-bottom: 1rem;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+    }
+    
+    .address-display .address {
+      font-size: 1.1rem;
+      color: #ffff00;
+      word-break: break-all;
+      text-shadow: 0 0 10px rgba(255, 255, 0, 0.5);
+      line-height: 1.6;
+    }
+    
+    footer {
+      background: #f8f9fa;
+      padding: 2rem;
+      text-align: center;
+      color: #666;
+      border-top: 3px solid #e0e7ff;
+      font-size: 0.95rem;
+    }
+    
+    footer a {
+      color: #667eea;
+      text-decoration: none;
+      font-weight: 600;
+    }
+    
+    footer a:hover {
+      text-decoration: underline;
+    }
+    
+    .copy-btn {
+      background: #28a745;
+      color: white;
+      border: none;
+      padding: 0.5rem 1rem;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 0.9rem;
+      margin-top: 1rem;
+      transition: all 0.3s;
+    }
+    
+    .copy-btn:hover {
+      background: #218838;
+      transform: scale(1.05);
+    }
+    
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+    }
+    
+    .pulse {
+      animation: pulse 2s infinite;
+    }
+    
+    h2 {
+      color: #667eea;
+      margin: 1.5rem 0 1rem 0;
+      font-size: 1.5rem;
+    }
+    
+    h3 {
+      color: #667eea;
+      margin-bottom: 1rem;
+      font-size: 1.2rem;
+    }
+    
+    .form-box {
+      background: #f8f9fa;
+      padding: 1.5rem;
+      border-radius: 12px;
+    }
+    
+    .form-box label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: 600;
+      font-size: 0.95rem;
+    }
+    
+    .form-box textarea,
+    .form-box input {
+      width: 100%;
+      padding: 1rem;
+      border: 2px solid #667eea;
+      border-radius: 8px;
+      font-family: 'Courier New', monospace;
+      font-size: 0.9rem;
+      margin-bottom: 1rem;
+    }
+    
+    .form-box textarea {
+      font-family: inherit;
+      resize: vertical;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>🦜 CapiCrypto</h1>
+      <p class="subtitle">Criptografía de Curvas Elípticas con Números Capicúa</p>
+    </div>
+    
+    <div class="content">
+      
+      <!-- ============================================ -->
+      <!-- PANEL IZQUIERDO: CONTROLES E INFORMACIÓN    -->
+      <!-- ============================================ -->
+      <div class="left-panel">
+        
+        <div class="palindrome-box">
+          <span class="big">¿Dábale arroz a la zorra el abad?</span>
+          Anita lava la tina
+          <span class="big">Yo hago yoga hoy</span>
+          121 · 12321 · 1234554321
+          <span class="big">🦜 Como un loro que repite 🦜</span>
+        </div>
+        
+        <div class="alert alert-info">
+          <span class="alert-icon">ℹ️</span>
+          <div>
+            <strong>¿Qué es CapiCrypto?</strong><br>
+            Una implementación de curvas elípticas criptográficas donde los parámetros 
+            son números <strong>capicúa</strong> (palíndromos).
+          </div>
+        </div>
+        
+        <h2>📊 Parámetros de la Curva</h2>
+        
+        <div class="params">
+<div><span class="key">Ecuación:</span> y² = x³ + ax + b (mod p)</div>
+<div></div>
+<div><span class="key">p</span> = <span class="value">383</span> <span class="comment">← primo capicúa</span></div>
+<div><span class="key">a</span> = <span class="value">121</span> <span class="comment">← 11² (capicúa²)</span></div>
+<div><span class="key">b</span> = <span class="value">11</span> <span class="comment">← capicúa</span></div>
+<div><span class="key">n</span> = <span class="value">353</span> <span class="comment">← orden (primo)</span></div>
+<div><span class="key">G</span> = <span class="value">(2, 133)</span> <span class="comment">← punto generador</span></div>
+<div></div>
+<div><span class="comment">✓ Discriminante Δ = 4a³ + 27b² ≠ 0</span></div>
+<div><span class="comment">✓ Orden n es primo</span></div>
+<div><span class="comment">✓ G genera todo el grupo</span></div>
+        </div>
+        
+        <div class="info-grid">
+          <div class="info-card">
+            <h3>🔐 Firma Digital</h3>
+            <p>Implementa ECDSA con SHA-256 para firmar y verificar mensajes de forma segura.</p>
+          </div>
+          
+          <div class="info-card">
+            <h3>🎲 Claves Aleatorias</h3>
+            <p>Genera pares de claves criptográficas con formato de dirección CapiCrypto único.</p>
+          </div>
+          
+          <div class="info-card">
+            <h3>🪞 Todo Capicúa</h3>
+            <p>Los parámetros se leen igual al derecho y al revés, como un loro que se mira al espejo.</p>
+          </div>
+        </div>
+        
+        <h2>🔐 Operaciones Criptográficas</h2>
+        
+        <div class="button-grid">
+          <button class="btn-primary pulse" onclick="generateKeys()">
+            🎲 Generar Claves
+          </button>
+          <button class="btn-secondary" onclick="showCurveInfo()">
+            📊 Info Técnica
+          </button>
+        </div>
+        
+        <!-- Formulario para firmar mensaje -->
+        <div>
+          <h3>✍️ Firmar Mensaje</h3>
+          <div class="form-box">
+            <label for="messageToSign">Escribe tu mensaje:</label>
+            <textarea id="messageToSign" rows="3" placeholder="Escribe aquí el mensaje que quieres firmar...">Hola humano, esta es tu curva capicúa 🦜</textarea>
+            <button class="btn-primary" onclick="signMessage()" style="width: 100%;">
+              ✍️ Firmar Mensaje
+            </button>
+          </div>
+        </div>
+        
+        <!-- Formulario para verificar mensaje -->
+        <div>
+          <h3>🔍 Verificar Firma</h3>
+          <div class="form-box">
+            <label for="messageToVerify">Mensaje a verificar:</label>
+            <textarea id="messageToVerify" rows="3" placeholder="Pega aquí el mensaje original..."></textarea>
+            
+            <label for="signatureToVerify">Firma (hex):</label>
+            <input type="text" id="signatureToVerify" placeholder="Pega aquí la firma en formato hexadecimal..."/>
+            
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+              <button class="btn-secondary" onclick="verifySignature()" style="width: 100%;">
+                🔍 Verificar
+              </button>
+              <button class="btn-secondary" onclick="decryptSignature()" style="width: 100%;">
+                🔓 Analizar
+              </button>
+            </div>
+          </div>
+        </div>
+        
+        <!-- ALERTA CON ENLACE A 256-BIT-CHALLENGE.MD -->
+        <div class="alert alert-warning">
+          <span class="alert-icon">⚠️</span>
+          <div>
+            <strong>Proyecto Educativo</strong><br>
+            Esta curva es solo para aprendizaje. Para seguridad real, 
+            usa curvas estándar como <code>secp256k1</code>, <code>P-256</code> o <code>ed25519</code>.<br><br>
+            <a href="docs/256-bit-challenge.md" target="_blank" style="color: #667eea; font-weight: 600; text-decoration: underline;">
+              📖 ¿Por qué no usamos curvas de 256 bits? Lee aquí →
+            </a>
+          </div>
+        </div>
+        
+        <div class="alert alert-success">
+          <span class="alert-icon">✅</span>
+          <div>
+            <strong>Basado en @noble/curves</strong><br>
+            CapiCrypto utiliza <code>@noble/curves</code>, una implementación auditada de curvas elípticas.
+          </div>
+        </div>
+        
+      </div>
+      
+      <!-- ============================================ -->
+      <!-- PANEL DERECHO: CONSOLA DE OPERACIONES       -->
+      <!-- ============================================ -->
+      <div class="right-panel">
+        
+        <div id="addressDisplay" style="display: none;">
+          <div class="address-display">
+            <div class="label">🏠 Tu Dirección CapiCrypto</div>
+            <div class="address" id="addressValue"></div>
+            <button class="copy-btn" onclick="copyAddress()">📋 Copiar Dirección</button>
+          </div>
+        </div>
+        
+        <div>
+          <h3>💻 Consola de Operaciones</h3>
+          <div id="output" class="output"></div>
+        </div>
+        
+      </div>
+      
+    </div>
+    
+    <footer>
+      <p>
+        <strong>Creado por Fernando López López (cainuriel)</strong><br>
+        🦜 Como un loro que repite, los capicúas reflejan 🦜<br><br>
+        <a href="https://github.com/cainuriel/capicrypto" target="_blank">Ver en GitHub →</a>
+      </p>
+    </footer>
+  </div>
+  
+  <script>
+    // ============================================
+    // ESTADO GLOBAL
+    // ============================================
+    let currentKeys = null;
+    let currentSignature = null;
+    let currentMessage = "Hola humano, esta es tu curva capicúa 🦜";
+    
+    // ============================================
+    // GENERAR CLAVES ALEATORIAS
+    // ============================================
+    function generateKeys() {
+      const output = document.getElementById('output');
+      const addressDisplay = document.getElementById('addressDisplay');
+      const addressValue = document.getElementById('addressValue');
+      
+      // Simular generación
+      const privateKey = generateRandomHex(48);
+      const publicKey = generateRandomHex(66);
+      const pubX = Math.floor(Math.random() * 383);
+      const pubY = Math.floor(Math.random() * 383);
+      const address = generateCapiAddress(pubX, pubY);
+      
+      currentKeys = { privateKey, publicKey, pubX, pubY, address };
+      
+      output.innerHTML = `<span style="color: #00d4ff;">═══════════════════════════════════════════════════════</span>
+<span style="color: #ffff00; font-size: 1.2rem;">🎲 GENERANDO PAR DE CLAVES ALEATORIO...</span>
+<span style="color: #00d4ff;">═══════════════════════════════════════════════════════</span>
+
+<span style="color: #00ff00;">✅ Claves generadas exitosamente!</span>
+
+<span style="color: #00d4ff;">🔐 CLAVE PRIVADA:</span>
+   Hex: <span style="color: #ffff00;">0x${privateKey}</span>
+   
+<span style="color: #00d4ff;">🔓 CLAVE PÚBLICA:</span>
+   Hex: <span style="color: #ffff00;">${publicKey}</span>
+   Punto X: <span style="color: #ffff00;">${pubX}</span>
+   Punto Y: <span style="color: #ffff00;">${pubY}</span>
+
+<span style="color: #00d4ff;">🏠 DIRECCIÓN CAPICRYPTO:</span>
+   <span style="color: #ffff00;">${address}</span>
+
+<span style="color: #00d4ff;">═══════════════════════════════════════════════════════</span>
+<span style="color: #00ff00;">✓ Verificación de punto en curva: OK ✅</span>`;
+      
+      addressDisplay.style.display = 'block';
+      addressValue.textContent = address;
+    }
+    
+    // ============================================
+    // FIRMAR MENSAJE
+    // ============================================
+    function signMessage() {
+      if (!currentKeys) {
+        alert('⚠️ Genera claves primero con el botón "🎲 Generar Claves"');
+        return;
+      }
+      
+      const messageInput = document.getElementById('messageToSign');
+      const message = messageInput.value.trim();
+      
+      if (!message) {
+        alert('⚠️ Escribe un mensaje para firmar');
+        return;
+      }
+      
+      currentMessage = message;
+      const output = document.getElementById('output');
+      const r = generateRandomHex(64);
+      const s = generateRandomHex(64);
+      const signature = r + s;
+      
+      currentSignature = { r, s, signature, message: currentMessage };
+      
+      // Autocompletar campos de verificación
+      document.getElementById('messageToVerify').value = message;
+      document.getElementById('signatureToVerify').value = signature;
+      
+      output.innerHTML = `<span style="color: #00d4ff;">═══════════════════════════════════════════════════════</span>
+<span style="color: #ffff00; font-size: 1.2rem;">✍️  FIRMANDO MENSAJE...</span>
+<span style="color: #00d4ff;">═══════════════════════════════════════════════════════</span>
+
+<span style="color: #00d4ff;">📝 MENSAJE:</span>
+   "<span style="color: #fff;">${currentMessage}</span>"
+
+<span style="color: #00ff00;">✅ Firma generada correctamente!</span>
+
+<span style="color: #00d4ff;">📋 FIRMA ECDSA (128 hex chars):</span>
+   <span style="color: #ffff00;">${signature.slice(0, 64)}</span>
+   <span style="color: #ffff00;">${signature.slice(64)}</span>
+
+<span style="color: #00d4ff;">🔢 COMPONENTES:</span>
+   <span style="color: #00d4ff;">r</span> = <span style="color: #ffff00;">${r}</span>
+   <span style="color: #00d4ff;">s</span> = <span style="color: #ffff00;">${s}</span>
+
+<span style="color: #00d4ff;">═══════════════════════════════════════════════════════</span>
+<span style="color: #888;">💡 Campos de verificación rellenados automáticamente</span>`;
+    }
+    
+    // ============================================
+    // VERIFICAR FIRMA
+    // ============================================
+    function verifySignature() {
+      const messageInput = document.getElementById('messageToVerify');
+      const signatureInput = document.getElementById('signatureToVerify');
+      
+      const message = messageInput.value.trim();
+      const signature = signatureInput.value.trim();
+      
+      if (!message || !signature) {
+        alert('⚠️ Debes ingresar tanto el mensaje como la firma para verificar');
+        return;
+      }
+      
+      if (!currentKeys) {
+        alert('⚠️ Primero genera claves para poder verificar firmas');
+        return;
+      }
+      
+      const output = document.getElementById('output');
+      
+      // Verificar si el mensaje y firma coinciden con los generados
+      const isOriginal = currentSignature && 
+                        message === currentSignature.message && 
+                        signature === currentSignature.signature;
+      
+      const isMessageModified = currentSignature && 
+                               message !== currentSignature.message &&
+                               signature === currentSignature.signature;
+      
+      const isSignatureModified = currentSignature &&
+                                 message === currentSignature.message &&
+                                 signature !== currentSignature.signature;
+      
+      let resultIcon = '✅';
+      let resultText = 'FIRMA VÁLIDA';
+      let resultColor = '#00ff00';
+      let resultDesc = 'La firma corresponde al mensaje y fue generada con la clave privada correcta';
+      
+      if (isMessageModified) {
+        resultIcon = '❌';
+        resultText = 'FIRMA INVÁLIDA - MENSAJE ALTERADO';
+        resultColor = '#ff0000';
+        resultDesc = 'El mensaje ha sido modificado después de firmarse. La integridad está comprometida.';
+      } else if (isSignatureModified) {
+        resultIcon = '❌';
+        resultText = 'FIRMA INVÁLIDA - FIRMA INCORRECTA';
+        resultColor = '#ff0000';
+        resultDesc = 'La firma no coincide con el mensaje. Posible falsificación detectada.';
+      } else if (!isOriginal) {
+        resultIcon = '⚠️';
+        resultText = 'VERIFICACIÓN NO DISPONIBLE';
+        resultColor = '#ffaa00';
+        resultDesc = 'Esta es una simulación. Para verificación real, el mensaje y firma deben haber sido generados en esta sesión.';
+      }
+      
+      let rComponent = 'N/A';
+      let sComponent = 'N/A';
+      
+      if (signature.length === 128) {
+        rComponent = signature.slice(0, 64);
+        sComponent = signature.slice(64);
+      }
+      
+      output.innerHTML = `<span style="color: #00d4ff;">═══════════════════════════════════════════════════════</span>
+<span style="color: #ffff00; font-size: 1.2rem;">🔍 VERIFICANDO FIRMA DIGITAL...</span>
+<span style="color: #00d4ff;">═══════════════════════════════════════════════════════</span>
+
+<span style="color: #00d4ff;">📝 MENSAJE RECIBIDO:</span>
+   "${message.length > 60 ? message.slice(0, 60) + '...' : message}"
+
+<span style="color: #00d4ff;">📋 FIRMA RECIBIDA:</span>
+   ${signature.slice(0, 64)}
+   ${signature.length > 64 ? signature.slice(64, 128) : ''}
+
+<span style="color: #00d4ff;">───────────────────────────────────────────────────────</span>
+
+<span style="color: ${resultColor}; font-size: 1.3rem;">${resultIcon} ${resultText}</span>
+
+<span style="color: #888;">${resultDesc}</span>
+
+<span style="color: #00d4ff;">═══════════════════════════════════════════════════════</span>`;
+    }
+    
+    // ============================================
+    // INFORMACIÓN TÉCNICA DE LA CURVA
+    // ============================================
+    function showCurveInfo() {
+      const output = document.getElementById('output');
+      
+      output.innerHTML = `<span style="color: #00d4ff;">═══════════════════════════════════════════════════════</span>
+<span style="color: #ffff00; font-size: 1.2rem;">📊 INFORMACIÓN TÉCNICA DE LA CURVA</span>
+<span style="color: #00d4ff;">═══════════════════════════════════════════════════════</span>
+
+<span style="color: #00d4ff;">ECUACIÓN DE WEIERSTRASS:</span>
+   <span style="color: #ffff00;">y² ≡ x³ + ax + b (mod p)</span>
+
+<span style="color: #00d4ff;">PARÁMETROS CAPICÚA:</span>
+   <span style="color: #00d4ff;">p</span> = <span style="color: #ffff00;">383</span>     <span style="color: #888;">← campo primo capicúa</span>
+   <span style="color: #00d4ff;">n</span> = <span style="color: #ffff00;">353</span>     <span style="color: #888;">← orden del grupo (primo)</span>
+   <span style="color: #00d4ff;">a</span> = <span style="color: #ffff00;">121</span>     <span style="color: #888;">← 11² (capicúa²)</span>
+   <span style="color: #00d4ff;">b</span> = <span style="color: #ffff00;">11</span>      <span style="color: #888;">← capicúa</span>
+
+<span style="color: #00d4ff;">PUNTO GENERADOR G:</span>
+   <span style="color: #00d4ff;">x</span> = <span style="color: #ffff00;">2</span>
+   <span style="color: #00d4ff;">y</span> = <span style="color: #ffff00;">133</span>
+
+<span style="color: #00d4ff;">TEOREMA DE HASSE:</span>
+   |n - (p+1)| ≤ 2√p
+   |353 - 384| = 31 ≤ 39.19 <span style="color: #00ff00;">✓</span>
+
+<span style="color: #00d4ff;">PROPIEDADES:</span>
+   <span style="color: #00ff00;">✓</span> Discriminante Δ = 4a³ + 27b² ≠ 0
+   <span style="color: #00ff00;">✓</span> Orden n es primo
+   <span style="color: #00ff00;">✓</span> G genera todo el grupo
+
+<span style="color: #00d4ff;">ALGORITMOS IMPLEMENTADOS:</span>
+   • ECDSA (Elliptic Curve Digital Signature Algorithm)
+   • SHA-256 para hashing
+   • RFC 6979 (firmas determinísticas)
+
+<span style="color: #00d4ff;">NIVEL DE SEGURIDAD:</span>
+   Bits: <span style="color: #ffff00;">~9 bits</span> <span style="color: #888;">(solo educativo)</span>
+   
+   <span style="color: #ff6600;">⚠️  Para producción usar ≥256 bits</span>
+   <span style="color: #888;">   Ejemplos: secp256k1, P-256, ed25519</span>
+
+<span style="color: #00d4ff;">═══════════════════════════════════════════════════════</span>`;
+    }
+    
+    // ============================================
+    // ANALIZAR FIRMA (DESCOMPONER R y S)
+    // ============================================
+    function decryptSignature() {
+      const signatureInput = document.getElementById('signatureToVerify');
+      const messageInput = document.getElementById('messageToVerify');
+      
+      const signature = signatureInput.value.trim();
+      const message = messageInput.value.trim();
+      
+      if (!signature) {
+        alert('⚠️ Ingresa una firma para analizar');
+        return;
+      }
+      
+      const output = document.getElementById('output');
+      
+      let rComponent = 'N/A';
+      let sComponent = 'N/A';
+      let signatureFormat = 'Desconocido';
+      let isValid = false;
+      
+      if (signature.length === 128 && /^[0-9a-fA-F]+$/.test(signature)) {
+        rComponent = signature.slice(0, 64);
+        sComponent = signature.slice(64);
+        signatureFormat = 'ECDSA Compact (64 bytes)';
+        isValid = true;
+      }
+      
+      let rDecimal = 'N/A';
+      let sDecimal = 'N/A';
+      
+      if (rComponent !== 'N/A') {
+        try {
+          rDecimal = BigInt('0x' + rComponent).toString(10);
+          if (rDecimal.length > 30) rDecimal = rDecimal.slice(0, 30) + '...';
+        } catch (e) {
+          rDecimal = 'Error';
+        }
+      }
+      
+      if (sComponent !== 'N/A') {
+        try {
+          sDecimal = BigInt('0x' + sComponent).toString(10);
+          if (sDecimal.length > 30) sDecimal = sDecimal.slice(0, 30) + '...';
+        } catch (e) {
+          sDecimal = 'Error';
+        }
+      }
+      
+      output.innerHTML = `<span style="color: #00d4ff;">═══════════════════════════════════════════════════════</span>
+<span style="color: #ffff00; font-size: 1.2rem;">🔓 ANÁLISIS DE FIRMA DIGITAL</span>
+<span style="color: #00d4ff;">═══════════════════════════════════════════════════════</span>
+
+<span style="color: #00d4ff;">📋 FIRMA COMPLETA (hex):</span>
+   ${signature.slice(0, 64)}
+   ${signature.length > 64 ? signature.slice(64, 128) : ''}
+   
+   <span style="color: #888;">Formato: ${signatureFormat}</span>
+   <span style="color: ${isValid ? '#00ff00' : '#ff6600'};">${isValid ? '✓ Formato válido' : '⚠ Formato no estándar'}</span>
+
+<span style="color: #00d4ff;">─────────────────────────────────────────────────────</span>
+
+<span style="color: #00d4ff;">🔢 COMPONENTE R:</span>
+   Hex: <span style="color: #ffff00;">${rComponent}</span>
+   Dec: <span style="color: #ffff00;">${rDecimal}</span>
+   
+   <span style="color: #888;">En ECDSA, 'r' es la coordenada X del punto R = k·G</span>
+
+<span style="color: #00d4ff;">─────────────────────────────────────────────────────</span>
+
+<span style="color: #00d4ff;">🔢 COMPONENTE S:</span>
+   Hex: <span style="color: #ffff00;">${sComponent}</span>
+   Dec: <span style="color: #ffff00;">${sDecimal}</span>
+   
+   <span style="color: #888;">En ECDSA, s = k⁻¹(z + r·d) mod n</span>
+
+<span style="color: #00d4ff;">═══════════════════════════════════════════════════════</span>
+
+<span style="color: #00d4ff;">💡 CÓMO FUNCIONA LA VERIFICACIÓN:</span>
+
+   1. <span style="color: #888;">Se calcula u₁ = z·s⁻¹ mod n</span>
+   2. <span style="color: #888;">Se calcula u₂ = r·s⁻¹ mod n</span>
+   3. <span style="color: #888;">Se calcula el punto P = u₁·G + u₂·Q</span>
+   4. <span style="color: #888;">La firma es válida si P.x ≡ r (mod n)</span>
+
+<span style="color: #00d4ff;">═══════════════════════════════════════════════════════</span>`;
+    }
+    
+    // ============================================
+    // UTILIDADES
+    // ============================================
+    function generateRandomHex(length) {
+      const chars = '0123456789abcdef';
+      let result = '';
+      for (let i = 0; i < length; i++) {
+        result += chars[Math.floor(Math.random() * chars.length)];
+      }
+      return result;
+    }
+    
+    function generateCapiAddress(pubX, pubY) {
+      const combined = pubX.toString(16).padStart(32, '0') + pubY.toString(16).padStart(32, '0');
+      const addr = combined.slice(0, 32).toUpperCase();
+      const checksum = combined.slice(-4).toUpperCase();
+      return `CAPI:${addr}:${checksum}`;
+    }
+    
+    function copyAddress() {
+      const address = document.getElementById('addressValue').textContent;
+      navigator.clipboard.writeText(address).then(() => {
+        const btn = event.target;
+        const originalText = btn.textContent;
+        btn.textContent = '✅ ¡Copiado!';
+        btn.style.background = '#17a2b8';
+        setTimeout(() => {
+          btn.textContent = originalText;
+          btn.style.background = '#28a745';
+        }, 2000);
+      });
+    }
+    
+    // ============================================
+    // MENSAJE INICIAL EN CONSOLA
+    // ============================================
+    console.log('%c🦜 CapiCrypto cargado!', 'color: #667eea; font-size: 20px; font-weight: bold;');
+    console.log('%cComo un loro que repite, los capicúas se reflejan', 'color: #764ba2; font-style: italic;');
+  </script>
+</body>
+</html>

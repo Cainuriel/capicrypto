@@ -28,7 +28,7 @@ console.log("");
 // MENSAJE A FIRMAR
 // ============================================
 
-const message = "Hola Fernando, esta es tu curva capicúa firmada 🦜🧮";
+const message = "Hola humano, esta es tu curva capicúa firmada 🦜🧮";
 const msgBytes = new TextEncoder().encode(message);
 
 console.log("📝 MENSAJE A FIRMAR:");

@@ -1,53 +1,182 @@
-# Curva Criptográfica Capicúa - Documentación
+# CapiCrypto - Documentación para IAs
 
-## 📋 Descripción General
+## 📋 Descripción General del Proyecto
 
-Este proyecto implementa una **curva elíptica personalizada** usando números capicúa (palíndromos) como parámetros. Es un experimento educativo que combina:
-- Criptografía de curva elíptica (ECC)
-- Números capicúa para los parámetros de la curva
-- Integración con Ethereum (ethers.js)
+**CapiCrypto** es una implementación educativa de **curvas elípticas criptográficas** donde los parámetros son **números capicúa** (palíndromos). 
 
-## 🔢 Matemáticas de la Curva
+### Concepto Principal: La Propiedad Multiplicadora
 
-### Ecuación de la Curva Elíptica
-La curva sigue la ecuación de Weierstrass:
+El proyecto se basa en la propiedad matemática de que **algunos números capicúa generan nuevos capicúa al multiplicarse**:
+
+```javascript
+// Base capicúa
+11 × 11 = 121           // ¡capicúa²!
+111 × 111 = 12321       // ¡capicúa²!
+1111 × 1111 = 1234321   // ¡patrón continúa!
+
+// Aplicado en CapiCrypto
+base_a = 11n;
+a = base_a * base_a;    // 121 (capicúa²)
+```
+
+Este concepto hace que los parámetros sean:
+1. Capicúa por sí mismos
+2. Resultado de multiplicar capicúas (cuadrados perfectos)
+3. Matemáticamente elegantes para enseñanza
+
+## 🔢 Parámetros de la Curva Actual (p=383)
+
+### Ecuación de Weierstrass
 ```
 y² ≡ x³ + ax + b (mod p)
 ```
 
-### Parámetros Capicúa
-- **p** (primo): `2^256 - 189` - Primo grande para seguridad
-- **a**: `12345678987654321` (capicúa) mod p
-- **b**: `98765432123456789` (capicúa) mod p
-- **G** (generador): `[2, 37]` - Punto base arbitrario
+### Parámetros Capicúa Encontrados
+```javascript
+p = 383              // ← primo capicúa (verificado)
+n = 353              // ← orden del grupo (primo)
+a = 121              // ← 11² (capicúa²)
+b = 11               // ← capicúa
+G = (2, 133)         // ← punto generador
+```
 
-## 🔐 Operaciones Implementadas
+**Propiedades verificadas:**
+- ✅ p es primo Y capicúa
+- ✅ n es primo (orden del grupo)
+- ✅ Discriminante Δ ≠ 0
+- ✅ Teorema de Hasse satisfecho
+- ✅ G genera todo el grupo
 
-### 1. Aritmética Modular
-- `mod(n, m)`: Módulo que maneja negativos correctamente
-- `inverseMod(a, m)`: Inverso multiplicativo usando algoritmo extendido de Euclides
+## 🏠 Formato de Dirección CapiCrypto
 
-### 2. Operaciones de Puntos
-- `pointAdd(P, Q)`: Suma de dos puntos en la curva
-  - Maneja punto en infinito (identidad)
-  - Calcula pendiente para puntos distintos o iguales
-  - Usa duplicación de punto cuando P = Q
-
-- `scalarMult(k, G)`: Multiplicación escalar (método binario)
-  - Multiplica un punto por un escalar eficientemente
-  - Implementación "double-and-add"
-
-### 3. Generación de Claves
-- **Clave privada**: Número aleatorio generado por ethers.js
-- **Clave pública**: Punto en la curva = privKey × G
-- **Dirección Ethereum**: Derivada de la clave privada estándar
-
-## 🧩 Estructura del Proyecto
+Las claves públicas se representan con formato propio (NO Ethereum):
 
 ```
-curva-capicua/
-├── package.json          # Dependencias (ethers.js)
-├── index.js             # Implementación de la curva + generación de claves
+CAPI:239A11504A21F344B93C6D9EF184B2A9:ABCD
+ ↑    ↑                                ↑
+ │    │                                └─ Checksum (4 hex)
+ │    └─────────────────────────────────── Dirección (32 hex)
+ └──────────────────────────────────────── Prefijo único
+```
+
+**¿Por qué no formato 0x... (Ethereum)?**
+- Evita confusión (no es compatible con Ethereum real)
+- Identidad propia del proyecto
+- Propósito educativo claro
+- Como un loro que tiene su propia voz 🦜
+
+## 🔐 Funcionalidades Implementadas
+
+## 🔐 Funcionalidades Implementadas
+
+### 1. Generación de Curva (index.js)
+```javascript
+// Búsqueda automática de punto generador
+// Cálculo de orden usando Teorema de Hasse
+// Creación de curva con @noble/curves
+// Generación de par de claves
+// Formato de dirección CAPI:
+```
+
+### 2. Firma Digital ECDSA (sign.js)
+```javascript
+// Firma de mensajes con SHA-256
+// Verificación de firmas
+// Detección de mensajes alterados
+// Detección de claves incorrectas
+```
+
+### 3. Generación Aleatoria (función exportada)
+```javascript
+import { generateRandomKeyPair } from './index.js';
+
+const newKeys = generateRandomKeyPair();
+// Retorna: { privateKey, publicKey, capiAddress, ... }
+```
+
+### 4. Interfaz Web (index.html)
+- Generación de claves aleatorias
+- Firma de mensajes
+- Verificación de firmas
+- Información técnica de la curva
+- Diseño visual con tema capicúa
+
+## 📚 Tecnologías Utilizadas
+
+### @noble/curves v2.0.1
+Librería criptográfica auditada que proporciona:
+- `weierstrass()` - Crear curvas personalizadas
+- `ecdsa()` - Firma digital
+- Aritmética de puntos completa
+- Operaciones de campo modulares
+
+### @noble/hashes
+- `sha256` para hash de mensajes
+- Funciones criptográficas seguras
+
+### Node.js (ESM)
+- Módulos ES6
+- Crypto para aleatoriedad
+- Scripts npm para ejecución
+
+## 🎯 Limitaciones y Alcance
+
+### Propósito Educativo
+- **Nivel de seguridad**: ~9 bits (solo demostración)
+- **NO usar en producción**: Curva demasiado pequeña
+- **Para aprender**: Conceptos de ECC, ECDSA, curvas custom
+
+### Curvas de 256 bits
+El proyecto originalmente intentó usar curvas de 256 bits pero:
+- Calcular orden `n` requiere algoritmo de Schoof
+- JavaScript puro no es adecuado (O(log⁸ p))
+- Se optó por curva educativa p=383
+
+### Archivos Legacy (docs/tools/ y docs/legacy/)
+- `calculate-order.js` - Intento de calcular orden 256-bit
+- `find-good-curve.js` - Buscador que encontró p=383
+- `find-point.js` - Herramienta de búsqueda de puntos
+- `index-old.js` - Versión antigua del proyecto
+- `test.js` - Suite de tests obsoleta
+
+## 🔄 Flujo de Ejecución
+
+### npm start (index.js)
+1. Buscar punto generador G en la curva
+2. Calcular orden n usando Hasse
+3. Crear curva con @noble/curves
+4. Generar par de claves aleatorio
+5. Derivar dirección CAPI:
+6. Verificar que todo esté en la curva
+
+### npm run sign (sign.js)
+1. Importar curva de index.js
+2. Generar nuevo par de claves
+3. Firmar mensaje con ECDSA
+4. Verificar firma original
+5. Probar con mensaje alterado (debe fallar)
+6. Probar con clave incorrecta (debe fallar)
+
+### npm run web
+1. Iniciar servidor HTTP en puerto 8080
+2. Abrir navegador automáticamente
+3. Simular operaciones criptográficas
+4. Mostrar resultados con estilo visual
+
+## 🦜 Filosofía del Proyecto
+
+Como un loro que repite, los capicúas se leen igual al derecho y al revés:
+- 121, 12321, 1234554321
+- "Anita lava la tina"
+- "¿Dábale arroz a la zorra el abad?"
+
+El proyecto usa esta simetría natural para enseñar conceptos criptográficos complejos de forma memorable y visual.
+
+---
+
+**Autor**: Fernando López López (cainuriel)  
+**Licencia**: MIT  
+**Repositorio**: github.com/cainuriel/capicrypto
 ├── sign.js              # Firma y verificación de mensajes
 ├── test.js              # Suite de pruebas completa
 └── CONTEXTO.md          # Este documento

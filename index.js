@@ -355,6 +355,26 @@ try {
   console.log("");
   
   // ============================================
+  // GENERAR DIRECCIÓN CAPICRYPTO
+  // ============================================
+  
+  function generateCapiAddress(pubX, pubY) {
+    // Combinar coordenadas como base para la dirección
+    const combined = pubX.toString(16).padStart(32, '0') + pubY.toString(16).padStart(32, '0');
+    
+    // Tomar primeros 32 caracteres y hacerlo capicúa-style
+    const addr = combined.slice(0, 32).toUpperCase();
+    
+    // Formato: CAPI: + dirección + checksum
+    // El checksum es simplemente los últimos 4 chars del hash
+    const checksum = combined.slice(-4).toUpperCase();
+    
+    return `CAPI:${addr}:${checksum}`;
+  }
+  
+  const capiAddress = generateCapiAddress(pubX, pubY);
+  
+  // ============================================
   // MOSTRAR INFORMACIÓN
   // ============================================
   
@@ -387,6 +407,28 @@ try {
   console.log("   Punto Público X    =", pubX.toString().slice(0, 30) + "...");
   console.log("   Punto Público Y    =", pubY.toString().slice(0, 30) + "...");
   console.log("");
+  console.log("🏠 DIRECCIÓN CAPICRYPTO");
+  console.log("");
+  
+  // Formatear la dirección en múltiples líneas si es necesario
+  const addrPart1 = capiAddress.slice(0, 42);  // "CAPI:" + primeros 37 chars
+  const addrPart2 = capiAddress.slice(42);      // resto
+  
+  if (capiAddress.length <= 45) {
+    console.log("   ╭─────────────────────────────────────────╮");
+    console.log("   │  🦜  " + capiAddress.padEnd(37, ' ') + "  │");
+    console.log("   ╰─────────────────────────────────────────╯");
+  } else {
+    console.log("   ╭─────────────────────────────────────────╮");
+    console.log("   │  🦜  " + addrPart1.padEnd(37, ' ') + "  │");
+    console.log("   │      " + addrPart2.padEnd(37, ' ') + "  │");
+    console.log("   ╰─────────────────────────────────────────╯");
+  }
+  
+  console.log("");
+  console.log("   ✨ Formato CapiCrypto nativo");
+  console.log("   🪞 Como un loro que se mira al espejo");
+  console.log("");
   console.log("═".repeat(60));
   console.log("");
   console.log("✅ VERIFICACIONES");
@@ -412,7 +454,8 @@ try {
     publicKeyBytes,
     pubPoint,
     pubX,
-    pubY
+    pubY,
+    capiAddress
   };
 
 } catch (error) {
@@ -448,4 +491,69 @@ export const publicKeyBytes = exports.publicKeyBytes;
 export const pubPoint = exports.pubPoint;
 export const pubX = exports.pubX;
 export const pubY = exports.pubY;
+export const capiAddress = exports.capiAddress;
 export { p, a, b, Gx, Gy, n, isOnCurve };
+
+// ============================================
+// FUNCIÓN DE GENERACIÓN ALEATORIA
+// ============================================
+
+export function generateRandomKeyPair() {
+  console.log("");
+  console.log("🎲 Generando nuevo par de claves aleatorio...");
+  console.log("");
+  
+  // Generar privkey aleatoria en rango [1, n-1]
+  const randomValue = BigInt("0x" + bytesToHex(cryptoRandomBytes(32))) % (n - 1n) + 1n;
+  
+  const fieldByteLength = Math.ceil(p.toString(16).length / 2);
+  const privateKeyHex = randomValue.toString(16).padStart(fieldByteLength * 2, '0');
+  const privateKeyBytes = new Uint8Array(Buffer.from(privateKeyHex, 'hex'));
+  
+  const privateKey = "0x" + bytesToHex(privateKeyBytes);
+  const publicKeyBytes = exports.capiCrypto.getPublicKey(privateKeyBytes);
+  const publicKey = bytesToHex(publicKeyBytes);
+  
+  const pubPoint = exports.CapiCryptoPoint.fromBytes(publicKeyBytes);
+  const { x: pubX, y: pubY } = pubPoint.toAffine();
+  
+  // Generar dirección
+  const combined = pubX.toString(16).padStart(32, '0') + pubY.toString(16).padStart(32, '0');
+  const addr = combined.slice(0, 32).toUpperCase();
+  const checksum = combined.slice(-4).toUpperCase();
+  const capiAddress = `CAPI:${addr}:${checksum}`;
+  
+  console.log("✅ Nuevo par generado!");
+  console.log("");
+  console.log("   🔑 Privada:", privateKey.slice(0, 20) + "...");
+  console.log("   🔓 Pública:", publicKey.slice(0, 20) + "...");
+  console.log("");
+  console.log("   🏠 Dirección:");
+  
+  const addrPart1 = capiAddress.slice(0, 42);
+  const addrPart2 = capiAddress.slice(42);
+  
+  if (capiAddress.length <= 45) {
+    console.log("      ╭─────────────────────────────────────────╮");
+    console.log("      │  🦜  " + capiAddress.padEnd(37, ' ') + "  │");
+    console.log("      ╰─────────────────────────────────────────╯");
+  } else {
+    console.log("      ╭─────────────────────────────────────────╮");
+    console.log("      │  🦜  " + addrPart1.padEnd(37, ' ') + "  │");
+    console.log("      │      " + addrPart2.padEnd(37, ' ') + "  │");
+    console.log("      ╰─────────────────────────────────────────╯");
+  }
+  
+  console.log("");
+  
+  return {
+    privateKey,
+    privateKeyBytes,
+    publicKey,
+    publicKeyBytes,
+    pubPoint,
+    pubX,
+    pubY,
+    capiAddress
+  };
+}
