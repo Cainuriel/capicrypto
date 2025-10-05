@@ -1,0 +1,30 @@
+{
+  "name": "capicrypto",
+  "version": "1.0.0",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "start": "node index.js",
+    "sign": "node sign.js",
+    "test": "node test.js",
+    "find-order": "node calculate-order.js",
+    "all": "node index.js && echo. && node sign.js"
+  },
+  "keywords": [
+    "cryptography",
+    "elliptic-curve",
+    "ecdsa",
+    "palindrome",
+    "capicua",
+    "capicrypto",
+    "ecc",
+    "weierstrass",
+    "educational"
+  ],
+  "author": "Fernando",
+  "license": "MIT",
+  "description": "🦜 CapiCrypto - Curva elíptica criptográfica con parámetros capicúa (palíndromos). Como un loro que repite, los números se leen igual del derecho y al revés. Implementación educativa de ECDSA.",
+  "dependencies": {
+    "@noble/curves": "^2.0.1"
+  }
+}
