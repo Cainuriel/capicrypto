@@ -282,6 +282,9 @@ capicrypto/
 │   ├── eliptics.md          # Documentación elliptic.js (legacy)
 │   ├── noble-curves.md      # Documentación @noble/curves
 │   ├── noble-curves-custom-weierstrass.md  # Guía curvas custom
+│   ├── 🧪 experiments/      # Experimentos matemáticos con capicúas
+│   │   ├── iterate-to-palindrome.js    # Proceso iterativo suma+reverso
+│   │   └── README.md                   # Documentación de experimentos
 │   ├── 🔧 tools/            # Scripts auxiliares de desarrollo
 │   │   ├── calculate-order.js    # Calculadora de orden (256 bits)
 │   │   ├── find-good-curve.js    # Buscador de curvas capicúa
@@ -464,6 +467,48 @@ const a = base_a * base_a;  // 121
 ```
 
 Esta propiedad hace que nuestros parámetros sean matemáticamente elegantes y conceptualmente coherentes con el tema del proyecto. 🦜🪞
+
+### 🧪 Experimentos Matemáticos
+
+¿Quieres explorar más propiedades de los capicúas? Hemos creado scripts experimentales:
+
+```bash
+# Proceso iterativo: n + reverse(n) hasta obtener capicúa
+node docs/experiments/iterate-to-palindrome.js
+```
+
+**Resultados del experimento**:
+- ✅ El proceso iterativo SÍ genera capicúas (98% de convergencia)
+- 📉 Solo ~5.3% de capicúas generados son primos (confirma Banks 2004)
+- 🎓 Método útil para educación, NO para criptografía
+- ⚠️ Algunos números nunca convergen (números de Lychrel: 196, 295...)
+
+Más detalles en [`docs/experiments/`](docs/experiments/README.md)
+
+---
+
+## 🚧 Roadmap
+
+### Versión Actual: 1.0.0 (Educativa)
+
+- [x] Curva con parámetros capicúa pequeños
+- [x] Generación de claves
+- [x] Firma y verificación ECDSA
+- [x] Documentación completa
+- [x] Experimentos matemáticos con capicúas
+
+### Futuro: 2.0.0 (Seguridad Real)
+
+- [ ] Implementar algoritmo de Schoof en Rust/WASM
+- [ ] Calcular orden para curva de 256 bits
+- [ ] Benchmarks de rendimiento
+- [ ] Suite de tests con vectores conocidos
+
+### Ideas Adicionales
+
+- [x] Interfaz web interactiva ✨
+- [x] Formato de dirección propio `CAPI:...`
+- [x] Generación aleatoria de claves
 - [ ] Visualización de la curva elíptica
 - [ ] Comparación con curvas estándar (secp256k1, P-256)
 - [ ] Generar más curvas capicúa con distintos tamaños
