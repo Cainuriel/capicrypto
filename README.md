@@ -11,7 +11,7 @@
 
 ---
 
-## 🎯 ¿Qué es CapiCrypto?
+##   ¿Qué es CapiCrypto?
 
 **CapiCrypto** es una implementación educativa de **curvas elípticas criptográficas** donde los parámetros son **números capicúa** (palíndromos): números que se leen igual al derecho que al revés.
 
@@ -24,7 +24,7 @@
 
 ---
 
-## 🔐 Concepto Matemático
+##   Concepto Matemático
 
 Una **curva elíptica de Weierstrass** tiene la forma:
 
@@ -70,7 +70,7 @@ a = 11² = 121          // ← ¡capicúa²! 🎯
 
 Como un loro que repite su reflejo infinitamente... 🦜🪞🦜
 
-### 📊 Fundamento Teórico: "Casi Todos los Palíndromos son Compuestos"
+###   Fundamento Teórico: "Casi Todos los Palíndromos son Compuestos"
 
 **Paper de Referencia**: ["Almost All Palindromes Are Composite"](https://www.jstor.org/stable/4145070) de William D. Banks (2004)
 
@@ -117,7 +117,7 @@ n = 353    // primo Y capicúa - necesario para el orden
 
 ---
 
-## 📦 Instalación
+##   Instalación
 
 ```bash
 git clone https://github.com/tu-usuario/capicrypto.git
@@ -127,7 +127,7 @@ npm install
 
 ---
 
-## 🚀 Uso Rápido
+##  Uso Rápido
 
 ### 1. Generar claves y ver la curva
 
@@ -174,7 +174,7 @@ npm run all
 
 ---
 
-## 📐 Parámetros de la Curva
+##   Parámetros de la Curva
 
 ### Versión Actual (Educativa) - p=383
 
@@ -234,13 +234,13 @@ Para una curva de 256 bits (nivel de seguridad real), necesitamos calcular el or
 - Para p ≈ 2^256: días o semanas de cómputo
 - Se requiere C++/Rust con MIRACL o SageMath
 
-📖 **[Lee la explicación completa aquí: El Desafío de 256 Bits](docs/256-bit-challenge.md)**
+  **[Lee la explicación completa aquí: El Desafío de 256 Bits](docs/256-bit-challenge.md)**
 
 Por eso optamos por la curva educativa p=383 donde el orden se puede calcular en < 1 segundo.
 
 ---
 
-## 🎓 ¿Qué es el Orden `n`?
+##   ¿Qué es el Orden `n`?
 
 El orden `n` es el número de veces que necesitas sumar el punto generador `G` a sí mismo para llegar al **punto en el infinito** (elemento identidad):
 
@@ -268,7 +268,7 @@ Sin el orden correcto, **no podemos firmar**:
 
 ---
 
-## 🛠️ Estructura del Proyecto
+##   Estructura del Proyecto
 
 ```
 capicrypto/
@@ -297,7 +297,7 @@ capicrypto/
 
 ---
 
-## 🔬 Detalles Técnicos
+##   Detalles Técnicos
 
 ### Tecnologías
 
@@ -333,7 +333,7 @@ modSqrt(a, p)       // Raíz cuadrada modular (Tonelli-Shanks)
 
 ---
 
-## 🎨 Ejemplos de Salida
+##   Ejemplos de Salida
 
 ### Generación de Curva
 
@@ -381,34 +381,7 @@ modSqrt(a, p)       // Raíz cuadrada modular (Tonelli-Shanks)
 
 ---
 
-## 🚧 Roadmap
-
-### Versión Actual: 1.0.0 (Educativa)
-
-- [x] Curva con parámetros capicúa pequeños
-- [x] Generación de claves
-- [x] Firma y verificación ECDSA
-- [x] Documentación completa
-
-### Futuro: 2.0.0 (Seguridad Real)
-
-- [ ] Implementar algoritmo de Schoof en Rust/WASM
-- [ ] Calcular orden para curva de 256 bits
-- [ ] Benchmarks de rendimiento
-- [ ] Suite de tests con vectores conocidos
-
-### Ideas Adicionales
-
-- [x] Interfaz web interactiva ✨
-- [x] Formato de dirección propio `CAPI:...`
-- [x] Generación aleatoria de claves
-- [ ] Visualización de la curva elíptica
-- [ ] QR codes para direcciones
-- [ ] Explorador de transacciones simulado
-
----
-
-## 🎨 Formato de Dirección Único
+##   Formato de Dirección Único
 
 CapiCrypto usa su propio formato de dirección, claramente diferenciado:
 
@@ -434,7 +407,7 @@ CapiCrypto usa su propio formato de dirección, claramente diferenciado:
 
 ---
 
-## 🧮 La Ciencia de los Capicúas Multiplicadores
+##   La Ciencia de los Capicúas Multiplicadores
 
 ### Secuencia de Capicúas Cuadrados
 
@@ -468,7 +441,7 @@ const a = base_a * base_a;  // 121
 
 Esta propiedad hace que nuestros parámetros sean matemáticamente elegantes y conceptualmente coherentes con el tema del proyecto. 🦜🪞
 
-### 🧪 Experimentos Matemáticos
+###   Experimentos Matemáticos
 
 ¿Quieres explorar más propiedades de los capicúas? Hemos creado scripts experimentales:
 
@@ -486,18 +459,21 @@ node docs/experiments/iterate-to-palindrome.js
 Más detalles en [`docs/experiments/`](docs/experiments/README.md)
 
 ---
+ 
+---
 
 ## 🚧 Roadmap
 
 ### Versión Actual: 1.0.0 (Educativa)
 
-- [x] Curva con parámetros capicúa pequeños
-- [x] Generación de claves
+- [x] Curva con parámetros capicúa pequeños (p=383)
+- [x] Generación de claves aleatorias
 - [x] Firma y verificación ECDSA
+- [x] Interfaz web interactiva
+- [x] Formato de dirección propio `CAPI:...`
 - [x] Documentación completa
-- [x] Experimentos matemáticos con capicúas
 
-### Futuro: 2.0.0 (Seguridad Real)
+### Futuro: 2.0.0  
 
 - [ ] Implementar algoritmo de Schoof en Rust/WASM
 - [ ] Calcular orden para curva de 256 bits
@@ -506,27 +482,11 @@ Más detalles en [`docs/experiments/`](docs/experiments/README.md)
 
 ### Ideas Adicionales
 
-- [x] Interfaz web interactiva ✨
-- [x] Formato de dirección propio `CAPI:...`
-- [x] Generación aleatoria de claves
-- [ ] Visualización de la curva elíptica
+- [ ] Visualización gráfica de la curva elíptica
 - [ ] Comparación con curvas estándar (secp256k1, P-256)
+- [ ] QR codes para direcciones
+- [ ] Explorador de transacciones simulado
 - [ ] Generar más curvas capicúa con distintos tamaños
-
----
-
-## 🧪 Testing
-
-```bash
-# Probar generación de curva
-npm start
-
-# Probar firmas
-npm run sign
-
-# Intentar calcular orden (advertencia: tarda)
-npm run find-order
-```
 
 ---
 
@@ -560,7 +520,7 @@ Actualmente solo funcionamos con p=383 por esta limitación.
 
 ---
 
-## 📚 Recursos
+##   Recursos
 
 ### Curvas Elípticas
 
@@ -581,19 +541,19 @@ Actualmente solo funcionamos con p=383 por esta limitación.
 
 ---
 
-## ⚖️ Licencia
+##   Licencia
 
 MIT License - Ver [LICENSE](LICENSE) para más detalles.
 
 ---
 
-## 👨‍💻 Autor
+##   Autor
 
-**Fernando** - Explorador de curvas elípticas y amante de los las les capicúas 🦜
+**Fernando López López (Cainuriel)** - Explorador de curvas elípticas y amante de los capicúas 🦜
 
 ---
 
-## 🎉 Agradecimientos
+##  Agradecimientos
 
 - **@noble/curves** por la excelente librería de curvas elípticas
 - La comunidad de criptografía por hacer accesible este conocimiento
@@ -606,5 +566,3 @@ MIT License - Ver [LICENSE](LICENSE) para más detalles.
 **¿Te gustó CapiCrypto?** ⭐ Dale una estrella al repo!
 
 🦜 **Como un loro repite, los capicúas reflejan** 🦜
-
-Creador cainuriel - Fernando lópez lópez.
